@@ -4,9 +4,11 @@ const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
 const PORT = process.env.PORT || 3002;
-const DATABASE_URL = process.env.DATABASE_URL
+const DATABASE_URL = process.env.DATABASE_URL;
 const notFound = require('../error-handlers/404');
 const errorHandler = require('../error-handlers/500');
+const userRouter = require('../routes/userRoutes');
+
 
 mongoose.set('strictQuery', true);
 mongoose.connect(DATABASE_URL, { useNewUrlParser: true, bufferCommands: false }, (error, connection) => {
@@ -20,7 +22,7 @@ mongoose.connect(DATABASE_URL, { useNewUrlParser: true, bufferCommands: false },
 app.use(express.json());
 app.use(cors());
 
-
+app.use(userRouter);
 
 app.get('/', (req, res, next) => {
 
