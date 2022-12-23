@@ -1,0 +1,23 @@
+{
+  "name": "clients",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "watch": "nodemon index.js",
+    "test-watch": "NODE_ENV=test jest --verbose --coverage --watchAll",
+    "test": "NODE_ENV=test jest --verbose --coverage",
+    "lint": "eslint **/*.js"
+  },
+  "author": "Lewis Benson, Kenny W. Lino, Elias Staehle, Zoe Gonzalez, Jacob Dang",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.2.1",
+    "dotenv": "^16.0.3",
+    "eslint": "^8.30.0",
+    "jest": "^29.3.1",
+    "socket.io-client": "^4.5.4",
+    "supertest": "^6.3.3"
+  }
+}
