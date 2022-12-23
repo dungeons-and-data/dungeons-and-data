@@ -9,7 +9,7 @@ const notFound = require('../error-handlers/404');
 const errorHandler = require('../error-handlers/500');
 
 mongoose.set('strictQuery', true);
-mongoose.connect(DATABASE_URL, { useNewUrlParser: true }, (error, connection) => {
+mongoose.connect(DATABASE_URL, { useNewUrlParser: true, bufferCommands: false }, (error, connection) => {
   if (error) {
     console.error(error);
   } else {
