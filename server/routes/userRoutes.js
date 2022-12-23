@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require('express');
-const { UserSchema } = require('../models');
+const { Users } = require('../models');
 
 
 const userRouter = express.Router();
@@ -27,7 +27,7 @@ async function signup(req, res, next) {
 
     const data = req.body;
 
-    const user = new UserSchema(data);
+    const user = new Users(data);
     await user.save();
     res.status(200).json(user);
 
@@ -47,7 +47,7 @@ function login(req, res, next) {
 
 async function usersRoute(req, res, next) {
   try {
-    const allUsers = await UserSchema.find();
+    const allUsers = await Users.find();
     res.status(200).send(allUsers);
   } catch (e) {
     next(e.message);
@@ -59,7 +59,7 @@ async function update(req, res, next) {
   try {
     const id = req.params.id;
     const data = req.body;
-    const updatedItem = await UserSchema.findByIdAndUpdate({ id: id }, data, { new: true, overwrite: true })
+    const updatedItem = await Users.findByIdAndUpdate({ id }, data, { new: true, overwrite: true });
     res.status(200).send(updatedItem);
   } catch (e) {
     next(e.message);
@@ -70,7 +70,7 @@ async function update(req, res, next) {
 async function destroy(req, res, next) {
   try {
     const id = req.params.id;
-    await UserSchema.findByIdAndDelete({ id });
+    await Users.findByIdAndDelete({ id });
     res.status(204).send();
   } catch (e) {
     next(e.message);
@@ -82,7 +82,7 @@ async function destroy(req, res, next) {
 async function readOne(req, res, next) {
   try {
     const id = req.params.id;
-    const oneUser = await UserSchema.findById({ id });
+    const oneUser = await Users.findById({ id });
     res.status(200).send(oneUser);
   } catch (e) {
     next(e.message);
@@ -93,5 +93,33 @@ async function readOne(req, res, next) {
 module.exports = userRouter;
 
 
+/** 
+for reference later
+Users.findOne({ username: 'lbenson' }).populate('characters').exec((err, user) => {
+  console.log(user);
+});
 
 
+EXAMPLE OF DATA RETURNED IF FIND() WAS PREFORMED 
+{
+  "_id": "5f7d7c1b4e9aa7f1d93f9b7e",
+  "username": "lbenson",
+  "token": "<hashed token>",
+  "password": "<hashed password>",
+  "characters": [
+    {
+      "_id": "5f7d7c1b4e9aa7f1d93f9b7f",
+      "name": "Bob",
+      "class": "Warrior",
+      "level": 15
+    },
+    {
+      "_id": "5f7d7c1b4e9aa7f1d93f9b80",
+      "name": "Sue",
+      "class": "Mage",
+      "level": 12
+    }
+  ]
+}
+
+*/
