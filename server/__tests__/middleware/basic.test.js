@@ -13,7 +13,7 @@ describe('Unit Testing for basic authorization middleware', () => {
     })),
   }));
 
-  test('It should call _authError function without a valid authorization header', () => {
+  it('Should call _authError function without a valid authorization header', () => {
     const req = { headers: {} };
     const res = {
       status: jest.fn(() => ({
@@ -27,7 +27,7 @@ describe('Unit Testing for basic authorization middleware', () => {
     expect(mockSend).toHaveBeenCalledWith('Invalid Login');
   });
 
-  test('It should return a user object if the authorization header is valid', async () => {
+  it('Should return a user object if the authorization header is valid', async () => {
     const req = {
       headers: {
         authorization: 'Basic dXNlcjpwYXNz',
