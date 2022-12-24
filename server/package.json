@@ -7,7 +7,7 @@
     "start": "node index.js",
     "watch": "nodemon index.js",
     "test-watch": "NODE_ENV=test jest --verbose --coverage --watchAll",
-    "test": "NODE_ENV=test jest --verbose --coverage",
+    "test": "NODE_ENV=test jest --verbose --coverage --detectOpenHandles",
     "lint": "eslint **/*.js"
   },
   "author": "Lewis Benson, Kenny W. Lino, Elias Staehle, Zoe Gonzalez, Jacob Dang",
