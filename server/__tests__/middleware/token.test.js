@@ -56,3 +56,31 @@ test('authenticate should call next with "Invalid Login" if the authorization he
   expect(next).toHaveBeenCalled();
   expect(next).toHaveBeenCalledWith('Invalid Login');
 });
+
+
+describe('authenticateToken Unit Testing', () => {
+  it('authenticateToken should throw an error if the token is not a string', async () => {
+    try {
+      await authenticateToken(null);
+    } catch (e) {
+      expect(e.message).toEqual('jwt malformed');
+    }
+  });
+
+  it('authenticateToken should throw an error if the token is not a valid JWT', async () => {
+    try {
+      await authenticateToken('invalid token');
+    } catch (e) {
+      expect(e.message).toEqual('jwt malformed');
+    }
+  });
+
+  it('authenticateToken should return an error if the username in the token is not found in the database', async () => {
+    try {
+      const mockToken = jwt.sign({ username: 'nonexistent_user' }, SECRET);
+      await authenticateToken(mockToken);
+    } catch (e) {
+      expect(e.message).toEqual('User Not Found');
+    }
+  });
+});

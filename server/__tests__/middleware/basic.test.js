@@ -1,5 +1,35 @@
 const basicAuth = require('../../middleware/auth/basic');
 
+
+
+
+jest.mock('../../models/User', () => {
+  return {
+    findOne: jest.fn().mockImplementation((query) => {
+      if (query.username === 'invalid') {
+        return null;
+      }
+      return {
+        username: 'valid',
+        password: 'hashedpassword',
+      };
+    }),
+  };
+});
+
+
+jest.mock('bcrypt', () => {
+  return {
+    compare: jest.fn().mockImplementation((password, hashedPassword) => {
+      if (password === 'validpassword' && hashedPassword === 'hashedpassword') {
+        return true;
+      }
+      return false;
+    }),
+  };
+});
+
+
 jest.mock('../../middleware/auth/helpers/authenticateBasic', () => jest.fn().mockResolvedValue({ id: 123 }));
 
 describe('Unit Testing for basic authorization middleware', () => {
@@ -42,6 +72,8 @@ describe('Unit Testing for basic authorization middleware', () => {
     expect(next).toHaveBeenCalled();
   });
 });
+
+
 
 
 
