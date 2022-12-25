@@ -23,9 +23,6 @@ jobs:
           DATABASE_URL_LIVE: ${{ secrets.DATABASE_URL_LIVE }}
           DATABASE_URL_TEST: ${{ secrets.DATABASE_URL_TEST }}
         run: |
-          echo "SECRET is ${{ secrets.SECRET }}"
-          echo "DATABASE_URL_LIVE is ${{ secrets.DATABASE_URL_LIVE }}"
-          echo "DATABASE_URL_TEST is ${{ secrets.DATABASE_URL_TEST }}"
           cd ./server
           npm install
           cd ../
