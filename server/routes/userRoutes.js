@@ -83,7 +83,7 @@ async function readOne(req, res, next) {
   try {
     // const oneUser = await Users.findById({ _id: id });
     const id = req.params.id;
-    const oneUser = await Users.findById({ id });
+    const oneUser = await Users.findById(id);
     res.status(200).send(oneUser);
   } catch (e) {
     next(e.message);
