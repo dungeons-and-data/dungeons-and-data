@@ -21,9 +21,9 @@ jobs:
       - name: npm install and run postinstall script and test
         run: |
           cd ./server
-          npm run postinstall
+          npm install
           cd ../clients
-          npm run postinstall
+          npm install
           cd ../
           npm test
         env:
