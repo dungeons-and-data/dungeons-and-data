@@ -21,8 +21,8 @@ jobs:
       - name: npm install, build, and test
         run: |
 
-          npm i /server
-          npm i /clients
+          npm i dungeons-and-data/server
+          npm i dungeons-and-data/clients
 
           npm test
         env:
