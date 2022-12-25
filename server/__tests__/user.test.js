@@ -13,7 +13,7 @@ beforeAll(async () => {
   user = new User({
     username: 'testuser',
     password: 'password',
-    role: 'admin',
+    role: 'dungeon-master',
   });
   await user.save();
 
@@ -36,12 +36,12 @@ describe('User routes', () => {
         .send({
           username: 'newuser',
           password: 'password',
-          role: 'admin',
+          role: 'dungeon-master',
         });
       expect(res.statusCode).toEqual(200);
       user = res.body;
       expect(res.body).toHaveProperty('username', 'newuser');
-      expect(res.body).toHaveProperty('role', 'admin');
+      expect(res.body).toHaveProperty('role', 'dungeon-master');
     });
 
 
@@ -51,7 +51,7 @@ describe('User routes', () => {
         .send({
 
           password: 'password',
-          role: 'admin',
+          role: 'dungeon-master',
         });
       expect(res.statusCode).toEqual(500);
       expect(res.body.message).toEqual('Users validation failed: username: Path `username` is required.');
@@ -62,7 +62,7 @@ describe('User routes', () => {
         .post('/sign')
         .send({
           password: 'password',
-          role: 'admin',
+          role: 'dungeon-master',
         });
       expect(res.statusCode).toEqual(404);
       expect(res.body.message).toEqual('Not Found!');
@@ -144,14 +144,14 @@ describe('PUT /users/:id', () => {
       .put(`/users/${id}`)
       .send({
         username: 'updatedUsername',
-        role: 'user',
+        role: 'hero',
       });
 
 
 
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('username', 'updatedUsername');
-    expect(res.body).toHaveProperty('role', 'user');
+    expect(res.body).toHaveProperty('role', 'hero');
   });
 
 
@@ -161,7 +161,7 @@ describe('PUT /users/:id', () => {
       .put(`/users/5f5e7c6d8e9f0a1b2c3d4e5f`)
       .send({
         username: 'updatedUsername',
-        role: 'user',
+        role: 'hero',
       });
     expect(res.statusCode).toEqual(404);
     expect(res.text).toEqual('Not Found!');

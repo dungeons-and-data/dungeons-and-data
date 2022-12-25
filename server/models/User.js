@@ -27,6 +27,7 @@ const UserSchema = new Schema({
   role: {
     type: String,
     required: true,
+    enum: ['hero', 'dungeon-master'],
   },
   characters: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -46,7 +47,6 @@ UserSchema.virtual('token')
 
 UserSchema.pre('save', async function (next) {
   try {
-    // Hash the password using bcrypt
     const hash = await bcrypt.hash(this.password, 10);
     this.password = hash;
     next();

@@ -14,7 +14,7 @@ describe('authenticateToken integration testing', () => {
     user = new Users({
       username: 'testuser',
       password: 'password',
-      role: 'admin',
+      role: 'dungeon-master',
     });
     await user.save();
     validToken = user.token;
@@ -50,6 +50,6 @@ describe('authenticateToken integration testing', () => {
   });
 
 
-  
+
 
 });

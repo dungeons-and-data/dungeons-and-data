@@ -1,8 +1,5 @@
 const basicAuth = require('../../middleware/auth/basic');
 
-
-
-
 jest.mock('../../models/User', () => {
   return {
     findOne: jest.fn().mockImplementation((query) => {
