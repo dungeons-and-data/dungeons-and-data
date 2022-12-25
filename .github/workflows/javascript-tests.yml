@@ -7,11 +7,9 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [16.x]
-     
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
@@ -19,12 +17,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: npm install and run postinstall script and test
-
-          env:
-                    CI: true
-                    SECRET: ${{ secrets.SECRET }}
-                    DATABASE_URL_LIVE: ${{ secrets.DATABASE_URL_LIVE }}
-                    DATABASE_URL_TEST: ${{ secrets.DATABASE_URL_TEST }}      
+        env:
+          CI: true
+          SECRET: ${{ secrets.SECRET }}
+          DATABASE_URL_LIVE: ${{ secrets.DATABASE_URL_LIVE }}
+          DATABASE_URL_TEST: ${{ secrets.DATABASE_URL_TEST }}
         run: |
           echo "SECRET is ${{ secrets.SECRET }}"
           echo "DATABASE_URL_LIVE is ${{ secrets.DATABASE_URL_LIVE }}"
@@ -37,5 +34,3 @@ jobs:
           cd ../
           cd ./server
           npm test
-
-   
