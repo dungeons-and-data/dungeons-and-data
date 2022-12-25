@@ -21,8 +21,8 @@ jobs:
       - name: npm install, build, and test
         run: |
 
-          npm i /server/package.json
-          npm i /clients/package.json
+          npm i /server
+          npm i /clients
 
           npm test
         env:
