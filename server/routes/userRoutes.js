@@ -16,11 +16,11 @@ userRouter.route('/login')
   .post(basicAuth, login);
 
 userRouter.route('/users')
-  .get(usersRoute);
+  .get(bearerAuth, usersRoute);
 userRouter.route('/users/:id')
-  .get(readOne)
-  .put(update)
-  .delete(destroy);
+  .get(bearerAuth, readOne)
+  .put(bearerAuth, update)
+  .delete(bearerAuth, destroy);
 
 
 async function signup(req, res, next) {
