@@ -23,6 +23,10 @@ jobs:
           cd ./server
           npm install
           cd ../
+          cd ./clients
+          npm install
+          cd ../
+          cd ./server
           npm test
 
         env:
