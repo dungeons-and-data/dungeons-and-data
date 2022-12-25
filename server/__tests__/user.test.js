@@ -112,7 +112,7 @@ describe('GET /users', () => {
 describe('GET /users/:id', () => {
   it('should throw a 500 error if the ID does not exist', async () => {
     const res = await request(server)
-      .get(`/users/123123`);
+      .get(`/users/not-a-valid-id`);
     expect(res.statusCode).toEqual(500);
   });
 
@@ -121,8 +121,65 @@ describe('GET /users/:id', () => {
 
     const res = await request(server)
       .get(`/users/${id}`);
-    console.log(res)
     expect(res.statusCode).toEqual(200);
+    expect(res.body).toHaveProperty('username', 'newuser');
+  });
+
+  it('should throw a 404 error if the ID does not exist', async () => {
+
+
+    const res = await request(server)
+      .get(`/users/5f5e7c6d8e9f0a1b2c3d4e5f`);
+    expect(res.statusCode).toEqual(404);
+    expect(res.text).toEqual('Not Found!');
   });
 });
 
+
+
+describe('PUT /users/:id', () => {
+  it('should update a user by their ID', async () => {
+    const id = user.id.toString();
+    const res = await request(server)
+      .put(`/users/${id}`)
+      .send({
+        username: 'updatedUsername',
+        role: 'user',
+      });
+
+
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toHaveProperty('username', 'updatedUsername');
+    expect(res.body).toHaveProperty('role', 'user');
+  });
+
+
+
+  it('should return a 404 error if the user does not exist', async () => {
+    const res = await request(server)
+      .put(`/users/5f5e7c6d8e9f0a1b2c3d4e5f`)
+      .send({
+        username: 'updatedUsername',
+        role: 'user',
+      });
+    expect(res.statusCode).toEqual(404);
+    expect(res.text).toEqual('Not Found!');
+  });
+});
+describe('DELETE /users/:id', () => {
+  it('should delete a user by their ID', async () => {
+    const id = user.id.toString();
+
+    const res = await request(server)
+      .delete(`/users/${id}`);
+    expect(res.statusCode).toEqual(204);
+  });
+
+  it('should return a 404 error if the user does not exist', async () => {
+    const res = await request(server)
+      .delete(`/users/5f5e7c6d8e9f0a1b2c3d4e5f`);
+    expect(res.statusCode).toEqual(404);
+    expect(res.text).toEqual('Not Found!');
+  });
+});
