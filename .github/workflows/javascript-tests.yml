@@ -23,9 +23,7 @@ jobs:
           cd ./server
           npm install
           cd ../
-          cd ./clients
-          npm install
-          cd ../
           npm test
+
         env:
           CI: true
