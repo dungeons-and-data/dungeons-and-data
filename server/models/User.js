@@ -22,21 +22,21 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   role: {
     type: String,
-    required: true
+    required: true,
   },
   characters: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Characters'
+    ref: 'Characters',
   }],
 },
-  {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
-  });
+{
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
+});
 
 UserSchema.virtual('token')
   .get(function () {

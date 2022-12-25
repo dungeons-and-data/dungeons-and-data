@@ -59,7 +59,9 @@ async function update(req, res, next) {
   try {
     const id = req.params.id;
     const data = req.body;
-    const updatedItem = await Users.findByIdAndUpdate({ id }, data, { new: true, overwrite: true });
+    const oneUser = await Users.findById(id);
+    if (!oneUser) res.status(404).send('Not Found!');
+    const updatedItem = await Users.findByIdAndUpdate(id, data, { new: true, overwrite: true });
     res.status(200).send(updatedItem);
   } catch (e) {
     next(e.message);
@@ -70,7 +72,9 @@ async function update(req, res, next) {
 async function destroy(req, res, next) {
   try {
     const id = req.params.id;
-    await Users.findByIdAndDelete({ id });
+    const oneUser = await Users.findById(id);
+    if (!oneUser) res.status(404).send('Not Found!');
+    await Users.findByIdAndDelete(id);
     res.status(204).send();
   } catch (e) {
     next(e.message);
@@ -84,6 +88,7 @@ async function readOne(req, res, next) {
     // const oneUser = await Users.findById({ _id: id });
     const id = req.params.id;
     const oneUser = await Users.findById(id);
+    if (!oneUser) res.status(404).send('Not Found!');
     res.status(200).send(oneUser);
   } catch (e) {
     next(e.message);
