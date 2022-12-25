@@ -20,7 +20,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: npm install, build, and test
         run: |
-          cd /server
+          cd dungeons-and-data/server
           npm i
           cd ../clients  
           npm i  
