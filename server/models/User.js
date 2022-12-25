@@ -2,8 +2,12 @@
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
-const SECRET = process.env.SECRET;
+let SECRET;
+if (process.env.NODE_ENV === 'test') {
+  SECRET = 'testEnvironment';
+} else {
+  SECRET = process.env.SECRET;
+}
 
 const mongoose = require('mongoose');
 
@@ -16,28 +20,31 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
   },
-  password: { 
-    type: String, 
-    required: true },
-  role: { 
-    type: String, 
-    required: true },
-  characters: [{ 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Characters' }], 
-}, 
-{
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true },
-});
+  password: {
+    type: String,
+    required: true
+  },
+  role: {
+    type: String,
+    required: true
+  },
+  characters: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Characters'
+  }],
+},
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  });
 
 UserSchema.virtual('token')
-  .get(function() {
-    return jwt.sign({username: this.username}, SECRET);  
+  .get(function () {
+    return jwt.sign({ username: this.username }, SECRET);
   });
 
 
-UserSchema.pre('save', async function(next) {
+UserSchema.pre('save', async function (next) {
   try {
     // Hash the password using bcrypt
     const hash = await bcrypt.hash(this.password, 10);
@@ -48,6 +55,6 @@ UserSchema.pre('save', async function(next) {
   }
 });
 
-const Users = mongoose.model('Users', UserSchema); 
+const Users = mongoose.model('Users', UserSchema);
 
 module.exports = Users;
