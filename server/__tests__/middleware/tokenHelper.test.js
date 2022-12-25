@@ -17,7 +17,7 @@ describe('authenticateToken integration testing', () => {
       role: 'dungeon-master',
     });
     await user.save();
-    validToken = user.token;
+
   });
 
   afterAll(async () => {
