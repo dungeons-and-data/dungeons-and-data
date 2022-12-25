@@ -31,3 +31,6 @@ jobs:
 
         env:
           CI: true
+          SECRET: ${{ secrets.SECRET }}
+          DATABASE_URL_LIVE: ${{ secrets.DATABASE_URL_LIVE }}
+          DATABASE_URL_TEST: ${{ secrets.DATABASE_URL_TEST }}
