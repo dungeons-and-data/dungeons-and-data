@@ -20,6 +20,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: npm install and run postinstall script and test
         run: |
+          echo "SECRET is ${{ secrets.SECRET }}"
+          echo "DATABASE_URL_LIVE is ${{ secrets.DATABASE_URL_LIVE }}"
+          echo "DATABASE_URL_TEST is ${{ secrets.DATABASE_URL_TEST }}"
           cd ./server
           npm install
           cd ../
