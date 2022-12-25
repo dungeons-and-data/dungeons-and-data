@@ -1,7 +1,9 @@
 'use strict';
 
 const express = require('express');
-const { Users } = require('../models');
+const Users = require('../models/User');
+const basicAuth = require('../middleware/auth/basic');
+const bearerAuth = require('../middleware/auth/bearer');
 
 
 const userRouter = express.Router();
@@ -11,7 +13,7 @@ userRouter.route('/signup')
   .post(signup);
 
 userRouter.route('/login')
-  .post(login);
+  .post(basicAuth, login);
 
 userRouter.route('/users')
   .get(usersRoute);
@@ -23,8 +25,6 @@ userRouter.route('/users/:id')
 
 async function signup(req, res, next) {
   try {
-
-
     const data = req.body;
 
     const user = new Users(data);
