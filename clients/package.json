@@ -8,7 +8,8 @@
     "watch": "nodemon index.js",
     "test-watch": "NODE_ENV=test jest --verbose --coverage --watchAll",
     "test": "NODE_ENV=test jest --verbose --coverage",
-    "lint": "eslint **/*.js"
+    "lint": "eslint **/*.js",
+    "postinstall": "npm install"
   },
   "author": "Lewis Benson, Kenny W. Lino, Elias Staehle, Zoe Gonzalez, Jacob Dang",
   "license": "MIT",

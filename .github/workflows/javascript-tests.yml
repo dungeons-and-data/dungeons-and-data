@@ -18,12 +18,13 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: npm install, build, and test
+      - name: npm install and run postinstall script and test
         run: |
-
-          npm i dungeons-and-data/server
-          npm i dungeons-and-data/clients
-
+          cd ./server
+          npm run postinstall
+          cd ../clients
+          npm run postinstall
+          cd ../
           npm test
         env:
           CI: true
