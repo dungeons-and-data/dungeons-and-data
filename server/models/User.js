@@ -2,6 +2,7 @@
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+
 let SECRET;
 if (process.env.NODE_ENV === 'test') {
   SECRET = 'testEnvironment';
@@ -26,13 +27,17 @@ const UserSchema = new Schema({
   },
   role: {
     type: String,
-    required: true,
+    default: 'hero',
     enum: ['hero', 'dungeon-master'],
   },
   characters: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Characters',
   }],
+  story: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Story',
+  }]
 }, {
   toJSON: { virtuals: true },
   toObject: { virtuals: true },
