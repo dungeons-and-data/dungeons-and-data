@@ -52,4 +52,7 @@ see `.env.sample`
 
 #### UML
 
-![UML](./assets/uml.png)
+![UML](./assets/uml.jpg)
+![UML](./assets/roles.jpg)
+![UML](./assets/database.jpg)
+![UML](./assets/flowchart.jpg)
