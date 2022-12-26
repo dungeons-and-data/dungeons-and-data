@@ -3,12 +3,9 @@
 const Users = require('../../../models/User');
 const bcrypt = require('bcrypt');
 
-module.exports =  async (username, password) => {
-  console.log('AUTH BASIC!');
+module.exports = async (username, password) => {
   const user = await Users.findOne({ username });
-  console.log(user);
-  const valid = await bcrypt.compare(password, user.password);
+  const valid = await bcrypt.compare(password, user?.password);
   if (valid) { return user; }
   throw new Error('Invalid User');
 };
-  

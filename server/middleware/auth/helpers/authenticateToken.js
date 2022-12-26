@@ -3,7 +3,12 @@
 
 const Users = require('../../../models/User');
 const jwt = require('jsonwebtoken');
-const SECRET = process.env.SECRET;
+let SECRET;
+if (process.env.NODE_ENV === 'test') {
+  SECRET = 'testEnvironment';
+} else {
+  SECRET = process.env.SECRET;
+}
 
 module.exports = async (token) => {
   try {

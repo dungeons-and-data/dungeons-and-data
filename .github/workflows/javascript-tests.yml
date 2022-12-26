@@ -1,25 +1,33 @@
+# @format
+
 name: Run Javascript Tests
 
 on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [16.x]
-
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: npm install, build, and test
-      run: |
-        npm i
-        npm test
-      env:
-        CI: true
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install and run postinstall script and test
+        env:
+          CI: true
+          SECRET: ${{ secrets.SECRET }}
+          DATABASE_URL_LIVE: ${{ secrets.DATABASE_URL_LIVE }}
+          DATABASE_URL_TEST: ${{ secrets.DATABASE_URL_TEST }}
+        run: |
+          cd ./server
+          npm install
+          cd ../
+          cd ./clients
+          npm install
+          cd ../
+          cd ./server
+          npm test
