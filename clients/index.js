@@ -1,17 +1,12 @@
 'use strict';
-const axios = require('axios');
-const {logInMenu, loginReq, signupReq} = require('./UI/login');
-let url = process.env.URL || 'http://localhost:3001'
-let loginChoice = async() => {
-  let response = await login();
-  if(response === 'LOGIN'){
-    let logInData = await loginReq();
-    let axiosRes = await axios.post(`${url}/login`, logInData)
-    console.log(axiosRes);
-  }else if(response === ''){
+const loginChoice = require('./axiosFN/login')
+require('dotenv').config();
+const { mainMenu, changeRole, menuChoice } = require('./UI/mainMenu')
 
-  }else{
-    return;
-  }
+const start = async () => {
+  const user = await loginChoice();
+  const menuRes = await mainMenu(user);
+const mainChoice = await menuChoice(menuRes, user)
 }
-loginChoice();
+start();
+// mainMenu(user);
