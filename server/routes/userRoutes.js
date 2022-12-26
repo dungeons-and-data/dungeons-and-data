@@ -4,7 +4,7 @@ const express = require('express');
 const Users = require('../models/User');
 const basicAuth = require('../middleware/auth/basic');
 const bearerAuth = require('../middleware/auth/bearer');
-
+const acl = require('../middleware/auth/acl');
 
 const userRouter = express.Router();
 
@@ -16,7 +16,7 @@ userRouter.route('/login')
   .post(basicAuth, login);
 
 userRouter.route('/users')
-  .get(bearerAuth, usersRoute);
+  .get(bearerAuth, acl('delete'), usersRoute);
 userRouter.route('/users/:id')
   .get(bearerAuth, readOne)
   .put(bearerAuth, update)

@@ -33,8 +33,7 @@ const UserSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Characters',
   }],
-},
-{
+}, {
   toJSON: { virtuals: true },
   toObject: { virtuals: true },
 });
@@ -42,6 +41,16 @@ const UserSchema = new Schema({
 UserSchema.virtual('token')
   .get(function () {
     return jwt.sign({ username: this.username }, SECRET);
+  });
+
+
+UserSchema.virtual('capabilities')
+  .get(function () {
+    const acl = {
+      hero: ['read'],
+      'dungeon-master': ['read', 'create', 'update', 'delete'],
+    };
+    return acl[this.role];
   });
 
 
