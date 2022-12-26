@@ -10,10 +10,10 @@ const StorySchema = new mongoose.Schema({
       stories: [{
         story: String,
         description: String,
-        chapters: [String]
-      }]
-    }
-  }]
+        chapters: [String],
+      }],
+    },
+  }],
 });
 
 
