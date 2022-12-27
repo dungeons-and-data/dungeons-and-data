@@ -31,3 +31,6 @@ jobs:
           cd ../
           cd ./server
           npm test
+          cd ../
+          cd ./clients
+          npm test
