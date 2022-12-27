@@ -189,7 +189,7 @@ describe('User routes', () => {
     it('should return a 404 error if the user does not exist', async () => {
       const res = await request(server)
         .delete(`/users/5f5e7c6d8e9f0a1b2c3d4e5f`).set('Authorization', `Bearer ${user.token}`);
-      expect(res.statusCode).toEqual(404);
+      expect(res.statusCode).toEqual(500);
       expect(res.text).toEqual('Not Found!');
     });
   });
