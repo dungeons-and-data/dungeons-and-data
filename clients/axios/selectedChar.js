@@ -2,6 +2,9 @@
 const axios = require('axios');
 let url = 'http://localhost:3001/';
 const selectedCharInq = require('../inquirer/selectedCharInq');
+const characterList = require('../inquirer/characterList');
+const inquirer = require('inquirer');
+const getChars = require('./getChars');
 module.exports = async (character, user) => {
 
   const { token } = user;
@@ -29,9 +32,10 @@ module.exports = async (character, user) => {
       user: character.user,
     };
     await axios.put(`${url}character/${character._id}`, body, config);
+
   } else if (userChoice[0] === 'delete') {
     await axios.delete(`${url}character/${character._id}`, {}, config);
   }
 
-  return;
+  return characterList(user, inquirer, getChars);
 };

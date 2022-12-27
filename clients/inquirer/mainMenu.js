@@ -59,6 +59,7 @@ const menuChoice = async (menuRes, user) => {
     console.log('finding game');
   } else if (menuRes === 'VIEW CHARACTERS') {
     const res = await characterList(user, inquirer, getChars);
+
     if (res === 'BACK') {
       menuRes = await mainMenu(user);
       await menuChoice(menuRes, user);
@@ -77,7 +78,7 @@ const menuChoice = async (menuRes, user) => {
   } else if (menuRes === 'VIEW STORIES') {
     //
   } else if (menuRes === 'EXIT') {
-    loginChoice();
+    await loginChoice();
   }
   return;
 };

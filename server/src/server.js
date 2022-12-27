@@ -50,7 +50,6 @@ app.use(userRouter);
 app.use(heroRouter);
 
 app.get('/', (req, res, next) => {
-
   res.status(200).send('Proof of life');
 });
 

@@ -11,7 +11,7 @@ describe('character selection module', () => {
     inquirer.prompt.mockImplementationOnce(() => Promise.resolve({ chars: 'BACK' }));
     getChars.mockImplementationOnce(() => Promise.resolve([{ name: 'Character 1' }, { name: 'Character 2' }]));
     const result = await selectCharacter('user', inquirer, getChars);
-    expect(result).toBe(undefined);
+    expect(result).toBe('BACK');
   });
 
   test('returns "CREATE CHARACTER" when reply is "CREATE CHARACTER"', async () => {

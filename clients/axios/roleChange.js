@@ -1,7 +1,7 @@
 'use strict';
 const axios = require('axios');
 
-let url = process.env.URL || 'http://localhost:3001';
+let url = process.env.URL || 'http://localhost:3001/';
 const diffRole = async (user, change) => {
   const { token } = user;
   const config = {
@@ -14,7 +14,7 @@ const diffRole = async (user, change) => {
     role: change,
   };
   const changedRole = await axios.put(`${url}users/${user.id}`, body, config);
-  
+
   return changedRole.data;
 };
 module.exports = {
