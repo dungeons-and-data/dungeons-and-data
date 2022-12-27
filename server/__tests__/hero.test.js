@@ -32,8 +32,6 @@ describe('POST /character', () => {
     expect(res.body.name).toEqual('newhero');
     expect(res.body.class).toEqual('Wizard');
     expect(res.body.level).toEqual(15);
-
-
   });
 
   let id;
@@ -61,8 +59,6 @@ describe('POST /character', () => {
         .get(`/character/${id}`);
       console.log(id);
       expect(res.body.name).toEqual('newhero');
-
-
     });
   });
 
@@ -99,7 +95,7 @@ describe('POST /character', () => {
     });
   });
 
-  //*READ FAIL TEST
+  //*ERROR HANDLING TESTS
 
   describe('ERROR HANDLER TESTS /character', () => {
     it('should fail if it doesn\'t exist', async () => {
