@@ -60,9 +60,6 @@ app.all('*', notFound);
 app.use(errorHandler);
 
 function start() {
-  server.listen({
-    host: SERVER_URL,
-    port: PORT,
-  }, () => console.log(`listening on port: ${PORT}`));
+  server.listen(PORT, () => console.log(`listening on port: ${PORT}`));
 }
 module.exports = { start, server, connectToMongoDB };
