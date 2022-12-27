@@ -14,11 +14,8 @@ const diffRole = async (user, change) => {
     role: change,
   };
   const changedRole = await axios.put(`${url}users/${user.id}`, body, config);
-
-
-
+  
   return changedRole.data;
-
 };
 module.exports = {
   diffRole,

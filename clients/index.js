@@ -1,7 +1,7 @@
 'use strict';
-const loginChoice = require('./axiosFN/login')
+const loginChoice = require('./axios/login')
 require('dotenv').config();
-const { mainMenu, changeRole, menuChoice } = require('./UI/mainMenu');
+const { mainMenu, menuChoice } = require('./inquirer/mainMenu');
 
 const start = async () => {
   const user = await loginChoice();

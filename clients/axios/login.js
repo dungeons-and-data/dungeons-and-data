@@ -1,4 +1,4 @@
-const { logInMenu, loginReq, signupReq } = require('../UI/login');
+const { logInMenu, loginReq, signupReq } = require('../inquirer/login');
 const axios = require('axios');
 let url = process.env.URL || 'http://localhost:3001/';
 
@@ -9,7 +9,6 @@ const loginChoice = async () => {
 
     if (response === 'LOGIN') {
       let logInData = await loginReq();
-      console.log(`${url}login`);
       let axiosRes = await axios.post(`${url}login`, {}, {
         auth: {
           username: logInData.username,
@@ -17,12 +16,12 @@ const loginChoice = async () => {
         },
       });
       user = axiosRes.data;
-      console.log(axiosRes.data);
+
     } else if (response === 'SIGNUP') {
       let logInData = await signupReq();
       let axiosRes = await axios.post(`${url}signup`, logInData);
       user = axiosRes.data;
-      console.log(axiosRes.data);
+
     } else {
       return;
     }
