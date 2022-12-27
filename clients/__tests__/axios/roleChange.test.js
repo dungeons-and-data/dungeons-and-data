@@ -2,7 +2,7 @@ const { diffRole } = require('../../axios/roleChange');
 
 const axios = require('axios');
 
-let url = process.env.URL || 'http://localhost:3001';
+let url = process.env.URL || 'http://localhost:3001/';
 
 jest.mock('axios');
 
