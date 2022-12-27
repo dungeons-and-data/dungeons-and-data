@@ -57,7 +57,7 @@ const menuChoice = async (menuRes, user) => {
   } else if (menuRes === 'FIND GAME') {
     console.log('finding game');
   } else if (menuRes === 'VIEW CHARACTERS') {
-    const res = await characterList(user);
+    const res = await characterList(user, inquirer);
     if (res === 'BACK') {
       menuRes = await mainMenu(user);
       await menuChoice(menuRes, user);

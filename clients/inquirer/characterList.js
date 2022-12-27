@@ -1,22 +1,17 @@
 'use strict';
 const getChars = require('../axios/getChars');
-const inquirer = require('inquirer');
-module.exports = async (user) => {
-  let characterByName;
+
+module.exports = async (user, inquirer) => {
   let characters = await getChars(user);
-  if (!characters.length) {
-    console.log('No characters found!');
-    characters = [];
-  } else {
-    characterByName = characters.map(char => char.name.toUpperCase());
-  }
+  characters = characters.length ? characters : [];
+  const characterNames = characters.map(char => char.name.toUpperCase());
   const reply = await inquirer
     .prompt([
       {
         type: 'list',
         name: 'chars',
         message: 'Select Character',
-        choices: [...characterByName, 'CREATE CHARACTER', 'BACK'],
+        choices: [...characterNames, 'CREATE CHARACTER', 'BACK'],
       },
     ]);
   if (reply.chars === 'BACK') return;
