@@ -2,6 +2,7 @@
 const inquirer = require('inquirer');
 const loginChoice = require('../axiosFN/login');
 const { diffRole } = require('../axiosFN/roleChange');
+const characterList = require('./characterList');
 const mainMenu = async (user) => {
   try {
     console.log('you are logged in as a', user.role);
@@ -54,7 +55,7 @@ const menuChoice = async (menuRes, user) => {
   } else if (menuRes === 'FIND GAME') {
     console.log('finding game');
   } else if (menuRes === 'VIEW CHARACTERS') {
-    //
+    characterList(user);
   } else if (menuRes === 'START NEW GAME') {
     console.log('starting new game');
   } else if (menuRes === 'VIEW STORIES') {
