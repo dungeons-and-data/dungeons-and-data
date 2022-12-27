@@ -5,11 +5,10 @@ const mongoose = require('mongoose');
 
 
 let user;
+
 beforeAll(async () => {
   await connectToMongoDB();
-
-});
-beforeAll(async () => {
+  await User.collection.drop();
   user = new User({
     username: 'testuser',
     password: 'password',
