@@ -2,6 +2,7 @@
 const inquirer = require('inquirer');
 const loginChoice = require('../axios/login');
 const createChar = require('../axios/createChar');
+const selectedChar = require('../axios/selectedChar');
 const { diffRole } = require('../axios/roleChange');
 const characterList = require('./characterList');
 const mainMenu = async (user) => {
@@ -62,7 +63,12 @@ const menuChoice = async (menuRes, user) => {
       await menuChoice(menuRes, user);
     } else if (res === 'CREATE CHARACTER') {
       await createChar(user);
-
+      menuRes = await mainMenu(user);
+      await menuChoice(menuRes, user);
+    } else {
+      await selectedChar(res, user);
+      menuRes = await mainMenu(user);
+      await menuChoice(menuRes, user);
     }
 
   } else if (menuRes === 'START NEW GAME') {

@@ -21,4 +21,7 @@ module.exports = async (user) => {
     ]);
   if (reply.chars === 'BACK') return;
   if (reply.chars === 'CREATE CHARACTER') return reply.chars;
+  const selectedData = characters
+    .filter(char => char.name.toUpperCase() === reply.chars.toUpperCase());
+  return selectedData[0];
 };
