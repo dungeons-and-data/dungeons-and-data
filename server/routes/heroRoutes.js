@@ -48,7 +48,7 @@ async function getOneCharacter(req, res, next) {
 async function getAllCharacters(req, res, next) {
   try {
     const allCharacters = await Characters.find();
-    if (allCharacters.length === 0) res.status(404).send('No Characters Found');
+    if (allCharacters.length === 0) res.status(404).send('No Character Found');
     res.status(200).send(allCharacters);
   }catch(e) {
     next(e.message);

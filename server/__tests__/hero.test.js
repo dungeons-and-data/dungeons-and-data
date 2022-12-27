@@ -38,6 +38,9 @@ describe('POST /character', () => {
 
   let id;
 
+  //*READ TEST
+
+
   describe('READ /character', () => {
     it('should grab all characters from the database', async () => {
       const res = await request(server)
@@ -47,6 +50,9 @@ describe('POST /character', () => {
       id = res.body[0]._id.toString();
     });
   });
+
+
+
 
 
   describe('READ /character/:id', () => {
@@ -59,6 +65,9 @@ describe('POST /character', () => {
 
     });
   });
+
+
+  //*PUT TESTS
 
   describe('PUT /character/:id', () => {
     it('should update one character from the database', async () => {
@@ -79,15 +88,40 @@ describe('POST /character', () => {
     });
   });
 
+  //*DELETE TESTS
+
   describe('DELETE /user/:id', () => {
 
     it('should delete a hero by ID', async () => {
       let res = await request(server)
-        .delete(`/character/${id}`)
+        .delete(`/character/${id}`);
       expect(res.statusCode).toEqual(204);
     });
   });
 
+  //*READ FAIL TEST
+
+  describe('ERROR HANDLER TESTS /character', () => {
+    it('should fail if it doesn\'t exist', async () => {
+        
+      const res0 = await request(server)
+        .post('/character');
+      const res1 = await request(server)
+        .get('/character/${id}');
+      const res2 = await request(server)
+        .get('/character');
+      const res3 = await request(server)
+        .put('/character/${id}');
+      const res4 = await request(server)
+        .delete('/character/${id}');
+      expect(res0.status).toEqual(404);
+      expect(res0.status).toEqual(500);
+      expect(res1.status).toEqual(404);
+      expect(res2.status).toEqual(404);
+      expect(res3.status).toEqual(404);
+      expect(res4.status).toEqual(404);
+    });
+  });
 
 
 
