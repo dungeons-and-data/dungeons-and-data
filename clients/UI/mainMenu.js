@@ -1,10 +1,11 @@
 'use strict';
 const inquirer = require('inquirer');
-const loginChoice = require('../axiosFN/login')
-const {diffRole} = require('../axiosFN/roleChange')
+const loginChoice = require('../axiosFN/login');
+const { diffRole } = require('../axiosFN/roleChange');
+const characterList = require('./characterList');
 const mainMenu = async (user) => {
   try {
-    console.log('you are logged in as a', user.role)
+    console.log('you are logged in as a', user.role);
     if (user.role === 'hero') {
       let response = await inquirer
         .prompt([
@@ -13,9 +14,9 @@ const mainMenu = async (user) => {
             name: 'hero',
             message: 'please choose an option',
             choices: ['CHANGE ROLE', 'FIND GAME', 'VIEW CHARACTERS', 'EXIT'],
-          }
-        ])
-      return response.hero
+          },
+        ]);
+      return response.hero;
     } else {
       let response = await inquirer
         .prompt([
@@ -24,14 +25,14 @@ const mainMenu = async (user) => {
             name: 'DM',
             message: 'please choose an option',
             choices: ['CHANGE ROLE', 'START NEW GAME', 'VIEW STORIES', 'EXIT'],
-          }
-        ])
-      return response.DM
+          },
+        ]);
+      return response.DM;
     }
   } catch (e) {
     console.log(e.message);
   }
-}
+};
 
 const changeRole = async () => {
   let response = await inquirer
@@ -39,32 +40,33 @@ const changeRole = async () => {
       type: 'list',
       name: 'roleChange',
       message: 'Select your desired role',
-      choices: ['hero', 'dungeon-master']
+      choices: ['hero', 'dungeon-master'],
 
-    }])
+    }]);
   return response.roleChange;
-}
+};
 
 const menuChoice = async (menuRes, user) => {
   if (menuRes === 'CHANGE ROLE') {
     let change = await changeRole();
-    if (change !== user.role) user = await diffRole(user, change)
-    await mainMenu(user)
+    if (change !== user.role) user = await diffRole(user, change);
+    menuRes = await mainMenu(user);
+    await menuChoice(menuRes, user);
   } else if (menuRes === 'FIND GAME') {
     console.log('finding game');
   } else if (menuRes === 'VIEW CHARACTERS') {
-
+    characterList(user);
   } else if (menuRes === 'START NEW GAME') {
-    console.log('starting new game')
+    console.log('starting new game');
   } else if (menuRes === 'VIEW STORIES') {
-
+    //
   } else if (menuRes === 'EXIT') {
     loginChoice();
   }
   return;
-}
+};
 module.exports = {
   mainMenu,
   changeRole,
   menuChoice,
-}
+};
