@@ -2,21 +2,21 @@
 
 
 const express = require('express');
-const Characters = require('../models/Characters')
+const Characters = require('../models/Characters');
 
 
 const heroRouter = express.Router();
 //ROUTES
 
-heroRouter.router('/character').post(makeCharacter);
+heroRouter.route('/character').post(makeCharacter);
 
-heroRouter.router('/character/:id').get(getOneCharacter);
+heroRouter.route('/character/:id').get(getOneCharacter);
 
-heroRouter.router('/character').get(getAllCharacters);
+heroRouter.route('/character').get(getAllCharacters);
 
-heroRouter.router('/character/:id').update(modifyCharacter);
+heroRouter.route('/character/:id').put(modifyCharacter);
 
-heroRouter.router('/character/:id').delete(deleteCharacter);
+heroRouter.route('/character/:id').delete(deleteCharacter);
 
 
 //FUNCTIONS
@@ -47,8 +47,8 @@ async function getOneCharacter(req, res, next) {
 
 async function getAllCharacters(req, res, next) {
   try {
-    const allCharacters = await Characters.get();
-    if (!allCharacters) res.status(404).send('No Characters Found');
+    const allCharacters = await Characters.find();
+    if (allCharacters.length === 0) res.status(404).send('No Characters Found');
     res.status(200).send(allCharacters);
   }catch(e) {
     next(e.message);
@@ -62,7 +62,8 @@ async function  modifyCharacter(req, res, next) {
     const data = req.body;
     if(!oneCharacter) res.status(404).send('No Character Found');
     const updatedCharacter = await Characters.findByIdAndUpdate(id, data, {new: true, overwrite: true });
-    res.status(200).send(updatedCharacter, console.log('~ Updated Character!'));
+    res.status(202).send(updatedCharacter);
+    console.log('~ Updated Character!');
   }catch(e) {
     next(e.message);
   }
@@ -83,3 +84,4 @@ async function  deleteCharacter(req, res, next) {
 
 }
 
+module.exports = heroRouter;

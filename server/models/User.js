@@ -37,7 +37,7 @@ const UserSchema = new Schema({
   story: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Story',
-  }]
+  }],
 }, {
   toJSON: { virtuals: true },
   toObject: { virtuals: true },
