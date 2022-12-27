@@ -107,14 +107,13 @@ describe('POST /character', () => {
       const res0 = await request(server)
         .post('/character');
       const res1 = await request(server)
-        .get('/character/${id}');
+        .get(`/character/${id}`);
       const res2 = await request(server)
         .get('/character');
       const res3 = await request(server)
-        .put('/character/${id}');
+        .put(`/character/${id}`);
       const res4 = await request(server)
-        .delete('/character/${id}');
-      expect(res0.status).toEqual(404);
+        .delete(`/character/${id}`);
       expect(res0.status).toEqual(500);
       expect(res1.status).toEqual(404);
       expect(res2.status).toEqual(404);
