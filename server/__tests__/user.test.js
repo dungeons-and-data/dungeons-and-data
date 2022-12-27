@@ -5,11 +5,10 @@ const mongoose = require('mongoose');
 
 
 let user;
+
 beforeAll(async () => {
   await connectToMongoDB();
-
-});
-beforeAll(async () => {
+  await User.collection.drop();
   user = new User({
     username: 'testuser',
     password: 'password',
@@ -21,6 +20,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  await User.collection.drop();
   await mongoose.connection.close();
 });
 
@@ -103,11 +103,10 @@ describe('User routes', () => {
         .get('/users').set('Authorization', `Bearer ${user.token}`);
       expect(res.statusCode).toEqual(200);
       expect(res.body).toBeInstanceOf(Array);
-      expect(res.body[0]).toHaveProperty('username', 'updatedUsername');
+      expect(res.body[0]).toHaveProperty('username', 'testuser');
     });
 
   });
-
 
   describe('GET /users/:id', () => {
     it('should throw a 500 error if the ID does not exist', async () => {
@@ -135,8 +134,6 @@ describe('User routes', () => {
     });
   });
 
-
-
   describe('PUT /users/:id', () => {
     it('should update a user by their ID', async () => {
       const id = user.id.toString();
@@ -147,14 +144,10 @@ describe('User routes', () => {
           role: 'hero',
         });
 
-
-
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveProperty('username', 'updatedUsername');
       expect(res.body).toHaveProperty('role', 'hero');
     });
-
-
 
     it('should return a 404 error if the user does not exist', async () => {
       let token = await request(server)
@@ -184,40 +177,6 @@ describe('User routes', () => {
       res = await request(server)
         .delete(`/users/${id}`).set('Authorization', `Bearer ${user.token}`);
       expect(res.statusCode).toEqual(204);
-    });
-
-    it('should return a 404 error if the user does not exist', async () => {
-      const res = await request(server)
-        .delete(`/users/5f5e7c6d8e9f0a1b2c3d4e5f`).set('Authorization', `Bearer ${user.token}`);
-      expect(res.statusCode).toEqual(404);
-      expect(res.text).toEqual('Not Found!');
-    });
-  });
-
-
-  describe('DELETE All', () => {
-
-    it('should delete all item from the database upon completion', async () => {
-      console.log('clear data from test database');
-      let users;
-      try {
-        const res = await request(server).get('/users').set('Authorization', `Bearer ${user.token}`);
-        users = res.body;
-        users.shift();
-      } catch (error) {
-        console.error(error);
-      }
-
-      while (users.length > 1) {
-        try {
-          await request(server).delete(`/users/${users[0]._id}`).set('Authorization', `Bearer ${user.token}`);
-          const updatedRes = await request(server).get('/users').set('Authorization', `Bearer ${user.token}`);
-          users = updatedRes.body;
-        } catch (error) {
-          console.error(error);
-        }
-      }
-
     });
   });
 

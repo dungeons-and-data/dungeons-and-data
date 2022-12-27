@@ -1,8 +1,11 @@
 'use strict';
 const inquirer = require('inquirer');
-const loginChoice = require('../axiosFN/login');
-const { diffRole } = require('../axiosFN/roleChange');
+const loginChoice = require('../axios/login');
+const createChar = require('../axios/createChar');
+const selectedChar = require('../axios/selectedChar');
+const { diffRole } = require('../axios/roleChange');
 const characterList = require('./characterList');
+const getChars = require('../axios/getChars');
 const mainMenu = async (user) => {
   try {
     console.log('you are logged in as a', user.role);
@@ -55,13 +58,27 @@ const menuChoice = async (menuRes, user) => {
   } else if (menuRes === 'FIND GAME') {
     console.log('finding game');
   } else if (menuRes === 'VIEW CHARACTERS') {
-    characterList(user);
+    const res = await characterList(user, inquirer, getChars);
+
+    if (res === 'BACK') {
+      menuRes = await mainMenu(user);
+      await menuChoice(menuRes, user);
+    } else if (res === 'CREATE CHARACTER') {
+      await createChar(user);
+      menuRes = await mainMenu(user);
+      await menuChoice(menuRes, user);
+    } else {
+      await selectedChar(res, user);
+      menuRes = await mainMenu(user);
+      await menuChoice(menuRes, user);
+    }
+
   } else if (menuRes === 'START NEW GAME') {
     console.log('starting new game');
   } else if (menuRes === 'VIEW STORIES') {
     //
   } else if (menuRes === 'EXIT') {
-    loginChoice();
+    await loginChoice();
   }
   return;
 };
