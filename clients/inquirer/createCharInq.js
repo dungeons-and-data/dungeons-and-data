@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-
+const axios = require('axios');
 module.exports = async () => {
 
 
@@ -15,6 +15,9 @@ module.exports = async () => {
     ]);
   if (reply.chars === 'NO') { return; }
   else {
+    const data = await axios
+      .get('https://www.dnd5eapi.co/api/classes');
+    const classNames = data.data.results.map(prof => prof.name);
     const reply = await inquirer
       .prompt([
         {
@@ -26,7 +29,7 @@ module.exports = async () => {
           type: 'list',
           name: 'profession',
           message: 'Please choose a class.',
-          choices: ['Warrior', 'Mage', 'Bard'],
+          choices: classNames,
         },
       ]);
 

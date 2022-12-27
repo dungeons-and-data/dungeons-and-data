@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-
+const axios = require('axios');
 module.exports = async (character) => {
   console.log('Name:', character.name);
   console.log('Class:', character.class);
@@ -24,13 +24,16 @@ module.exports = async (character) => {
       ]);
     return ['nameChange', reply.name];
   } else if (reply.chars === 'CHANGE CLASS') {
+    const data = await axios
+      .get('https://www.dnd5eapi.co/api/classes');
+    const classNames = data.data.results.map(prof => prof.name);
     const reply = await inquirer
       .prompt([
         {
           type: 'list',
           name: 'profession',
           message: 'Choose a new class',
-          choices: ['Warrior', 'Mage', 'Bard'],
+          choices: classNames,
         },
       ]);
     return ['classChange', reply.profession];
