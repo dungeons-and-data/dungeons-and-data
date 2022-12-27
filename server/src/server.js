@@ -12,17 +12,15 @@ const mongoose = require('mongoose');
 
 const cors = require('cors');
 const PORT = process.env.PORT || 3002;
-const SERVER_URL = process.env.SERVER_URL || 'localhost';
 
-/*
+
 let DATABASE_URL;
 if (process.env.NODE_ENV === 'test') {
   DATABASE_URL = process.env.DATABASE_URL_TEST;
 } else {
   DATABASE_URL = process.env.DATABASE_URL_LIVE;
 }
-*/
-let DATABASE_URL = process.env.DATABASE_URL_TEST;
+DATABASE_URL = process.env.DATABASE_URL_TEST;
 
 const notFound = require('../error-handlers/404');
 const errorHandler = require('../error-handlers/500');
