@@ -20,7 +20,7 @@ if (process.env.NODE_ENV === 'test') {
 } else {
   DATABASE_URL = process.env.DATABASE_URL_LIVE;
 }
-DATABASE_URL = process.env.DATABASE_URL_TEST;
+
 
 const notFound = require('../error-handlers/404');
 const errorHandler = require('../error-handlers/500');
@@ -32,7 +32,7 @@ const startIo = require('../socket-server');
 mongoose.set('strictQuery', true);
 async function connectToMongoDB() {
   try {
-    await console.log(`Connected to MongoDB at ${DATABASE_URL}`);
+    await console.log(`Connected to MongoDB`);
     await mongoose.connect(DATABASE_URL, { useNewUrlParser: true, bufferCommands: false });
   } catch (error) {
     console.error(error);
