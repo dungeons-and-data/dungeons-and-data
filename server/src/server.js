@@ -26,6 +26,7 @@ const notFound = require('../error-handlers/404');
 const errorHandler = require('../error-handlers/500');
 const userRouter = require('../routes/userRoutes');
 const heroRouter = require('../routes/heroRoutes');
+const DMRouter = require('../routes/dmRoutes');
 const startIo = require('../socket-server');
 
 
@@ -48,6 +49,7 @@ app.use(cors());
 
 app.use(userRouter);
 app.use(heroRouter);
+app.use(DMRouter);
 
 app.get('/', (req, res, next) => {
   res.status(200).send('Proof of life');
