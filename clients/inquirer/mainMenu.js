@@ -5,6 +5,7 @@ const createChar = require('../axios/createChar');
 const selectedChar = require('../axios/selectedChar');
 const { diffRole } = require('../axios/roleChange');
 const characterList = require('./characterList');
+const getChars = require('../axios/getChars');
 const mainMenu = async (user) => {
   try {
     console.log('you are logged in as a', user.role);
@@ -57,7 +58,7 @@ const menuChoice = async (menuRes, user) => {
   } else if (menuRes === 'FIND GAME') {
     console.log('finding game');
   } else if (menuRes === 'VIEW CHARACTERS') {
-    const res = await characterList(user, inquirer);
+    const res = await characterList(user, inquirer, getChars);
     if (res === 'BACK') {
       menuRes = await mainMenu(user);
       await menuChoice(menuRes, user);

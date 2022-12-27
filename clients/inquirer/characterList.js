@@ -1,7 +1,7 @@
 'use strict';
-const getChars = require('../axios/getChars');
 
-module.exports = async (user, inquirer) => {
+
+module.exports = async (user, inquirer, getChars) => {
   let characters = await getChars(user);
   characters = characters.length ? characters : [];
   const characterNames = characters.map(char => char.name.toUpperCase());
