@@ -11,7 +11,7 @@ const selectedStory = require('./selectedStory');
 
 
 const createRoom = require('../socket_handlers/dungeon_masters/createRoom');
-const { getListOfRooms, joinRoom } = require('../socket_handlers/heroes/roomHandlers');
+const { requestListOfRooms, getListOfRooms, joinRoom, socket } = require('../socket_handlers/heroes/roomHandlers');
 
 
 const createStory = require('../axios/createStory');
@@ -69,8 +69,12 @@ const menuChoice = async (menuRes, user) => {
     menuRes = await mainMenu(user);
     await menuChoice(menuRes, user);
   } else if (menuRes === 'FIND GAME') {
-    getListOfRooms();
-    //joinRoom();
+
+    socket.emit('GET_ROOMS');
+    let currentRooms;
+    socket.on('ROOMS', function(payload) {
+      currentRooms = payload;
+    });
 
     console.log('finding game');
   } else if (menuRes === 'VIEW CHARACTERS') {
