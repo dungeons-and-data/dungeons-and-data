@@ -10,18 +10,16 @@ module.exports = async (user) => {
   };
 
   const storyData = await createStoryInq();
-  const { name, theme, chapter,scenarios} = storyData;
-  const newChapter = {chapterName, description, }
+  const { name, theme, chapter } = storyData;
   const body = {
-    storyName: name,
-    theme: theme,
-    chapter: [{
-      chapterName
-    }],
-
+    name,
+    theme,
+    chapter,
     user: user.id,
   };
-  // const newChar = await axios.post(`${url}character`, body, config);
+
+  console.log(body);
+  const newChar = await axios.post(`${url}character`, body, config);
 
 
   // console.log(newChar.data);
