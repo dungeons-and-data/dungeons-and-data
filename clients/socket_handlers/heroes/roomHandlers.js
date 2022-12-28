@@ -3,21 +3,19 @@
 const { io } = require('socket.io-client');
 const socket = io('http://localhost:3001/');
 
-let currentRooms;
+// Getting list of rooms
 
-socket.on('ROOMS', function(payload) {
-  console.log('This is payload in ROOMS', payload);
-  currentRooms = payload.rooms;
-  console.log('Here is currentRooms:', currentRooms);
-});
+let currentRooms;
 
 function getListOfRooms(){
   socket.emit('GET_ROOMS');
 }
+
+// join a room
 
 function joinRoom(dungeonMasterId) {
   socket.emit('JOIN', dungeonMasterId);
   console.log(`Joined ${dungeonMasterId}'s room.`);
 }
 
-module.exports = {getListOfRooms, joinRoom};
+module.exports = {getListOfRooms, joinRoom, socket};
