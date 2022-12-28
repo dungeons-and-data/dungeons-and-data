@@ -23,7 +23,7 @@ module.exports = async () => {
       .prompt([
         {
           type: 'input',
-          name: 'name',
+          name: 'storyName',
           message: 'Enter story name.',
         },
         {
@@ -34,7 +34,7 @@ module.exports = async () => {
         },
       ]);
 
-    data.name = reply.name;
+    data.storyName = reply.storyName;
     data.theme = reply.theme;
     await newChapter();
     console.log('new chapter is done');
@@ -54,7 +54,11 @@ module.exports = async () => {
       },
     ]);
     const allScenarios = await newScenario();
-    chapters.push(reply, allScenarios);
+
+    const scenariosStrings = allScenarios.map(item => item.scenarios);
+    const { chapterName, description } = reply;
+    console.log(scenariosStrings);
+    chapters.push({ chapterName, description, scenarios: scenariosStrings });
 
   }
   async function newScenario() {
@@ -84,11 +88,11 @@ module.exports = async () => {
     return scenarios;
   }
 
-  let b = 4;
+  let b = 3;
   for (let i = 0; i < b; i++) {
 
-    if (i < 3) await newChapter();
-    if (i >= 3) {
+    if (i < 2) await newChapter();
+    if (i >= 2) {
 
       const moreChaps = await inquirer.prompt([
         {

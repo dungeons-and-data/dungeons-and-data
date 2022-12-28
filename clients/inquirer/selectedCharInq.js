@@ -6,7 +6,7 @@ module.exports = async (character) => {
   console.log('Level:', character.level);
   const reply = await inquirer
     .prompt([
-      {
+      { 
         type: 'list',
         name: 'chars',
         message: 'Choose an action',

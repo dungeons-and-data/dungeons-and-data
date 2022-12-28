@@ -3,7 +3,7 @@
 module.exports = async (user, inquirer, getStories) => {
   let stories = await getStories(user);
   stories = stories.length ? stories : [];
-  const storyNames = stories.map(char => char.name.toUpperCase());
+  const storyNames = stories.map(story => story.storyName.toUpperCase());
   const reply = await inquirer
     .prompt([
       {
@@ -14,9 +14,12 @@ module.exports = async (user, inquirer, getStories) => {
       },
     ]);
   if (reply.stories === 'BACK') return 'BACK';
-  if (reply.stories === 'CREATE STORY') { return reply.stories; } else {
+  if (reply.stories === 'CREATE STORY') {
+    return reply.stories;
+  } else {
     const selectedData = stories
-      .filter(char => char.name.toUpperCase() === reply.stories.toUpperCase());
+      .filter(stories => stories.storyName.toUpperCase() === reply.stories.toUpperCase());
+    console.log(selectedData[0]);
     return selectedData[0];
   }
 };

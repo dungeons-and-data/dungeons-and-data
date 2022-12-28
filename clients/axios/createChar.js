@@ -8,7 +8,7 @@ module.exports = async (user) => {
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
-
+// ()sdfsdfsdfsdf
   const charData = await createCharInq();
   const { name, profession } = charData;
   const body = {
