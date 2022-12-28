@@ -12,7 +12,7 @@ DMRouter.route('/stories').get(getAllStories);
 // Read a single for single DM
 DMRouter.route('/stories/:id').get(getOneStory);
 
-// Read a single new story
+// Create a single new story
 DMRouter.route('/stories').post(addNewStory);
 
 // Read a single new story
