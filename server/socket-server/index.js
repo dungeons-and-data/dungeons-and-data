@@ -17,7 +17,7 @@ const startIo = (io) => {
     socket.on('GET_ROOMS', () => {
       let availableRooms = [];
       let rooms = io.sockets.adapter.rooms;
-    
+
       for (const [key, value] of rooms.entries()) {
         console.log(key, value);
         if (!value.has(key)) {
