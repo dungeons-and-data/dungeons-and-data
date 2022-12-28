@@ -10,20 +10,22 @@ module.exports = async (user) => {
   };
 
   const storyData = await createStoryInq();
-  const { name, theme, chapter } = storyData;
+  const { storyName, theme, chapter } = storyData;
+  const lowerTheme = theme.toLowerCase();
   const body = {
-    name,
-    theme,
+    storyName: storyName,
+    lowerTheme,
     chapter,
     user: user.id,
   };
 
-  console.log(body);
-  const newChar = await axios.post(`${url}character`, body, config);
+
+  console.log(JSON.stringify(body, null, 2));
+
+  const story = await axios.post(`${url}stories`, body, config);
 
 
-  // console.log(newChar.data);
 
 
-  return;
+  return story;
 };

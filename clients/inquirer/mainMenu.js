@@ -6,9 +6,11 @@ const createChar = require('../axios/createChar');
 const selectedChar = require('../axios/selectedChar');
 const characterList = require('./characterList');
 const getChars = require('../axios/getChars');
+const selectedStory = require('./selectedStory');
 const createStory = require('../axios/createStory');
-const storieslist = require('./storiesList');
+const storiesList = require('./storiesList');
 const getStories = require('../axios/getStories');
+
 const mainMenu = async (user) => {
   try {
     console.log('you are logged in as a', user.role);
@@ -80,8 +82,7 @@ const menuChoice = async (menuRes, user) => {
   } else if (menuRes === 'START NEW GAME') {
     console.log('starting new game');
   } else if (menuRes === 'VIEW STORIES') {
-    const res = await storieslist(user, inquirer, getStories);
-
+    const res = await storiesList(user, inquirer, getStories);
     if (res === 'BACK') {
       menuRes = await mainMenu(user);
       await menuChoice(menuRes, user);
@@ -89,11 +90,15 @@ const menuChoice = async (menuRes, user) => {
       await createStory(user);
       menuRes = await mainMenu(user);
       await menuChoice(menuRes, user);
+    } else if (res === 'UPDATE STORY') {
+      //todo update story function (menu for options)
+      menuRes = await mainMenu(user);
+      await menuChoice(menuRes, user);
     } else {
-      console.log('in progress')
-      // await selectedChar(res, user);
-      // menuRes = await mainMenu(user);
-      // await menuChoice(menuRes, user);
+      let story = res;
+      await selectedStory(user, story);
+      menuRes = await mainMenu(user);
+      await menuChoice(menuRes, user);
     }
   } else if (menuRes === 'EXIT') {
     await loginChoice();
