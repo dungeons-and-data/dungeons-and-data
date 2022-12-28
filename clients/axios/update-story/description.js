@@ -5,7 +5,7 @@
 const axios = require('axios');
 let url = 'http://localhost:3001/';
 
-async function chapterName(userToken, chapterName, chapterId, story) {
+async function description(userToken, description, chapterId, story) {
   const { token } = userToken;
   const config = {
     headers: { Authorization: `Bearer ${token}` },
@@ -17,7 +17,7 @@ async function chapterName(userToken, chapterName, chapterId, story) {
 
   const remainingChaps = chapter.filter((chap) => chap._id !== chapterId);
 
-  const { description, scenarios } = updatedChap[0];
+  const { chapterName, scenarios } = updatedChap[0];
 
   const body = {
     storyName,
@@ -37,4 +37,4 @@ async function chapterName(userToken, chapterName, chapterId, story) {
 
   return story;
 }
-module.exports = chapterName;
+module.exports = description;

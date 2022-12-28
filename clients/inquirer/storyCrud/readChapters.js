@@ -36,7 +36,7 @@ async function readChapters(story, user, crud) {
     story,
     user,
     chapId,
-    crud
+    crud,
   );
   if (nextOption === 'YES') return await readChapters(story, user, crud);
   if (nextOption === 'NO') return;
