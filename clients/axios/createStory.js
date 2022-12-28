@@ -20,8 +20,6 @@ module.exports = async (user) => {
   };
 
 
-  console.log(JSON.stringify(body, null, 2));
-
   const story = await axios.post(`${url}stories`, body, config);
 
 

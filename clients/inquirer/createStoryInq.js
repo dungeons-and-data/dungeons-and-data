@@ -57,7 +57,6 @@ module.exports = async () => {
 
     const scenariosStrings = allScenarios.map(item => item.scenarios);
     const { chapterName, description } = reply;
-    console.log(scenariosStrings);
     chapters.push({ chapterName, description, scenarios: scenariosStrings });
 
   }

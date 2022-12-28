@@ -41,3 +41,54 @@
 ],
 "\_\_v": 0
 }
+
+
+{
+  "_id": {
+    "$oid": "63ac7ba91867f825db57171a"
+  },
+  "storyName": "A Great Story",
+  "theme": "castle",
+  "chapter": [
+    {
+      "chapterName": "Chap 1",
+      "description": "In the woods",
+      "scenarios": [
+        "There is a large tree dude!",
+        "There is a spider!",
+        "There is a llama!"
+      ],
+      "_id": {
+        "$oid": "63ac7baa1867f825db57171b"
+      }
+    },
+    {
+      "chapterName": "Chap2",
+      "description": "You arrive in a clearing",
+      "scenarios": [
+        "There is a horse!",
+        "There is a bear!",
+        "there is a Banana!"
+      ],
+      "_id": {
+        "$oid": "63ac7baa1867f825db57171c"
+      }
+    },
+    {
+      "chapterName": "chap 3",
+      "description": "you arrive at a river",
+      "scenarios": [
+        "There is an argy fisherman!",
+        "There is a bear!",
+        "There is a rabid fox!"
+      ],
+      "_id": {
+        "$oid": "63ac7baa1867f825db57171d"
+      }
+    }
+  ],
+  "user": {
+    "$oid": "63aa5f76c5eedb9ec8007a80"
+  },
+  "__v": 0
+}
