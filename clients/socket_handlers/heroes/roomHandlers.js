@@ -20,4 +20,5 @@ function joinRoom(dungeonMasterId) {
   console.log(`Joined ${dungeonMasterId}'s room.`);
 }
 
+
 module.exports = {getListOfRooms, joinRoom};
