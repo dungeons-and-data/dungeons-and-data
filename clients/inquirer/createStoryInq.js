@@ -1,9 +1,9 @@
 const inquirer = require('inquirer');
-const axios = require('axios');
 module.exports = async () => {
-  let data = {}
+
+  let data = {};
   const chapters = [];
-const scenarios = [];
+
 
   const reply = await inquirer
     .prompt([
@@ -17,95 +17,102 @@ const scenarios = [];
   if (reply.story === 'NO') { return; }
   else {
     await newStory();
-
-    async function newStory() {
-      const reply = await inquirer
-        .prompt([
-          {
-            type: 'input',
-            name: 'name',
-            message: 'Enter story name.',
-          },
-          {
-            type: 'list',
-            name: 'theme',
-            message: 'Choose a theme (default is castle theme).',
-            choices: ['CASTLE', 'FOREST', 'DESERT', 'CAVE'],
-          },
-        ]);
-      await newChapter();
-      data.name = reply.name;
-      data.theme = reply.theme
-    }
-    async function newChapter() {
-      if(chapters.length >= 3) {
-        const newChap = await inquirer.prompt([
-          {
-            type: 'list',
-            message: 'Do you want to create another chapter?',
-            name: 'story',
-            choices: ['YES', 'NO'],
-          },
-        ])
-        if (newChap.story === 'NO') { return; }
-        else { await newChapter(); }
-
-      }
-    
-      const reply = await inquirer.prompt([
-        {
-          type: 'iput',
-          name: 'chapterName',
-          message: 'Enter a name for the chapter',
-        },
+  }
+  async function newStory() {
+    const reply = await inquirer
+      .prompt([
         {
           type: 'input',
-          name: 'description',
-          message: 'Enter a brief description of the chapter i.e. "you arive on the castle floor."',
+          name: 'storyName',
+          message: 'Enter story name.',
+        },
+        {
+          type: 'list',
+          name: 'theme',
+          message: 'Choose a theme (default is castle theme).',
           choices: ['CASTLE', 'FOREST', 'DESERT', 'CAVE'],
         },
-      ])
-      await newScenario(reply);
-       
-       
-    }
-   async function newScenario(reply){
-    const res = await inquirer.prompt([
+      ]);
+
+    data.storyName = reply.storyName;
+    data.theme = reply.theme;
+    await newChapter();
+    console.log('new chapter is done');
+
+  }
+  async function newChapter() {
+    const reply = await inquirer.prompt([
       {
+        type: 'input',
+        name: 'chapterName',
+        message: 'Enter a name for the chapter',
+      },
+      {
+        type: 'input',
+        name: 'description',
+        message: 'Enter a brief description of the chapter i.e. "you arrive on the castle floor."',
+      },
+    ]);
+    const allScenarios = await newScenario();
+
+    const scenariosStrings = allScenarios.map(item => item.scenarios);
+    const { chapterName, description } = reply;
+    chapters.push({ chapterName, description, scenarios: scenariosStrings });
+
+  }
+  async function newScenario() {
+    const scenarios = [];
+    let a = 2;
+    for (let i = 0; i <= a; i++) {
+      const res = await inquirer.prompt([
+        {
           type: 'input',
           name: 'scenarios',
           message: 'write a few scenarios i.e. "you encounter a large bat."',
+        },
+      ]);
+      scenarios.push(res);
+      if (scenarios.length >= 3) {
+        const newScene = await inquirer.prompt([
+          {
+            type: 'list',
+            name: 'scene',
+            message: 'Do you want to create another scenario?',
+            choices: ['YES', 'NO'],
+          },
+        ]);
+        if (newScene.scene === 'YES') a++;
       }
-    ])
-    if(!scenarios[0]?.chapterName){
-      scenarios.push(reply);
-      console.log('sadasdkjnwqejkdjkoadjasndsahnjdsahndjksa-----------------',chapters.scenarios)
     }
-      scenarios.push(res)
-    if(scenarios.length < 3){
-      console.log(scenarios)
-      await newScenario(reply);
-    }else {
-      const newScene = await inquirer.prompt([
+    return scenarios;
+  }
+
+  let b = 3;
+  for (let i = 0; i < b; i++) {
+
+    if (i < 2) await newChapter();
+    if (i >= 2) {
+
+      const moreChaps = await inquirer.prompt([
         {
           type: 'list',
-          name: 'scene',
-          message: 'Do you want to create another scenario?',
+          name: 'chap',
+          message: 'Do you want to create another Chapter?',
           choices: ['YES', 'NO'],
         },
-      ])
-      if (newScene.scene === 'NO') { 
-        chapters.push(scenarios)
-        return newChapter(); 
+      ]);
+
+      if (moreChaps.chap === 'YES') {
+        b++;
+
+        await newChapter();
       }
-      else { await newScenario(reply); }
     }
-    
   }
-  data.chapter = chapters
-  // data.chapter.scenarios = scenarios
- 
-  console.log('------------------',data.chapter);
-  return data
-}
+
+  data.chapter = chapters;
+
+  return data;
 };
+
+

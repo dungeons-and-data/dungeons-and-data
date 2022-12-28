@@ -13,7 +13,7 @@ const startIo = (io) => {
       console.log('list of rooms in JOIN', io.sockets.adapter.rooms);
       socket.emit('JOIN', dungeonMasterId);
     });
-
+    
     socket.on('GET_ROOMS', () => {
       let availableRooms = [];
       let rooms = io.sockets.adapter.rooms;
@@ -25,10 +25,8 @@ const startIo = (io) => {
         }
       }
       socket.emit('ROOMS', availableRooms);
-    },
-    );
+    });
   });
 };
 
 module.exports = startIo;
-
