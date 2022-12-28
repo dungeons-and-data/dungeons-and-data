@@ -90,11 +90,7 @@ const menuChoice = async (menuRes, user) => {
       await createStory(user);
       menuRes = await mainMenu(user);
       await menuChoice(menuRes, user);
-    } else if (res === 'UPDATE STORY') {
-      //todo update story function (menu for options)
-      menuRes = await mainMenu(user);
-      await menuChoice(menuRes, user);
-    } else {
+    }  else {
       let story = res;
       await selectedStory(user, story);
       menuRes = await mainMenu(user);
