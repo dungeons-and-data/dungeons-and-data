@@ -1,14 +1,16 @@
-/** @format */
+
 
 'use strict';
 let gameOn;
 const inquirer = require('inquirer');
+const unfavorable = require('../../axios/unfavorable');
 
 module.exports = function gameOnTwo() {
   gameOn = false;
 };
 
-async function gamePlay(incomingChapters = [], socket) {
+
+async function gamePlay(incomingChapters = [], socket, selectedCharacter) {
   gameOn = true;
   const choices = incomingChapters.map((item) => item[0] + ':' + item[1]);
 
@@ -30,14 +32,12 @@ async function gamePlay(incomingChapters = [], socket) {
   const chosenChap = incomingChapters.filter(
     (item) => item[1] === chosenOne[1],
   );
-
   let remainingScenarios = chosenChap[0][2];
-
   while (remainingScenarios.length > 0) {
     if (!gameOn) {
       return [];
     }
-    remainingScenarios = await playScenario(remainingScenarios, socket);
+    remainingScenarios = await playScenario(remainingScenarios, remainingChaps, socket, selectedCharacter);
   }
 
   return remainingChaps;
@@ -45,7 +45,7 @@ async function gamePlay(incomingChapters = [], socket) {
 
 module.exports = gamePlay;
 
-async function playScenario(remainingScenarios, socket) {
+async function playScenario(remainingScenarios, remainingChaps, socket, selectedCharacter) {
   const reply = await inquirer.prompt([
     {
       type: 'list',

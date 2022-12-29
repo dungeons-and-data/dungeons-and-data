@@ -8,7 +8,7 @@ const createChar = require('../axios/createChar');
 const selectedChar = require('../axios/selectedChar');
 const characterList = require('./characterList');
 const getChars = require('../axios/getChars');
-const gameOnTwo = require('./game-logic/gamePlay');
+
 //SOCKETS
 const { io } = require('socket.io-client');
 const socket = io('http://localhost:3001/');
@@ -35,7 +35,10 @@ const {
   dungeonMasterBegin,
   onGoingGame,
   gameOver,
+  getCharForEnd,
 } = require('./game-logic/dungeonMaster');
+
+let chosenChar;
 
 const mainMenu = async (user) => {
   try {
@@ -79,7 +82,13 @@ const changeRole = async () => {
 };
 
 socket.on('CLASS', async (payload) => await getClass(payload));
-socket.on('CHARACTER', async (payload) => await getCharacter(payload));
+socket.on('CHARACTER', async (payload) => {
+  await getCharacter(payload);
+});
+socket.on('CHARACTER_END', async (payload) => {
+  console.log(payload, 'shjkdhsadaslkjdahjks');
+  await getCharForEnd(payload);
+})
 const menuChoice = async (menuRes, user) => {
   // hero choices
   if (menuRes === 'CHANGE ROLE') {
@@ -95,21 +104,35 @@ const menuChoice = async (menuRes, user) => {
       currentRooms = payload;
       currentRooms.push('Back to main menu');
       const heroReply = await heroConnect(user, currentRooms);
-
       if (heroReply === 'Back to main menu') {
         socket.off();
         menuRes = await mainMenu(user);
         await menuChoice(menuRes, user);
       } else {
         await userConnect(heroReply, socket, user);
+        socket.off();
       }
     });
     socket.on('PROBLEM', async (payload) => {
       await userPlaying(user, socket, payload);
 
       const waitForAction = new Promise((resolve, reject) => {
-        socket.on('FAVORABLE', () => {
-          resolve(false);
+        socket.on('REMAINING', (payload) => {
+          console.log(payload, 'this is the payload for resolve')
+          if (payload.length === 0) {
+            resolve(true);
+          }
+        })
+        socket.on('FAVORABLE', async () => {
+          const res = await checkForBad();
+          if (res.data.bad >= 3) {
+            socket.emit('GAME_OVER', 'victory');
+            socket.off();
+            resolve(true);
+
+
+          }
+
         });
         socket.on('UNFAVORABLE', async () => {
           await addSomeBad();
@@ -119,10 +142,12 @@ const menuChoice = async (menuRes, user) => {
           if (res.data.bad >= 3) {
             socket.emit('GAME_OVER', 'loss');
             endGame = true;
+            socket.off();
           }
           resolve(endGame);
         });
         socket.on('GAME_OVER', () => {
+          socket.off();
           resolve(true);
         });
       });
@@ -130,6 +155,7 @@ const menuChoice = async (menuRes, user) => {
 
       if (actionResult) {
         console.log('GAME OVER');
+        actionResult = false
         menuRes = await mainMenu(user);
         await menuChoice(menuRes, user);
       }

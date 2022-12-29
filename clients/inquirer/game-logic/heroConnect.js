@@ -3,17 +3,17 @@
 'use strict';
 let url = 'http://localhost:3001/';
 const inquirer = require('inquirer');
-const characterList = require('../characterList');
+const getCharJoinGame = require('../getCharJoinGame');
 const getChars = require('../../axios/getChars');
 const createChar = require('../../axios/createChar');
 const unfavorable = require('../../axios/unfavorable');
 const axios = require('axios');
-let selectedChar;
+let selectedChar
 async function heroConnect(user, rooms) {
-  selectedChar = await characterList(user, inquirer, getChars);
+  let selectedChar = await getCharJoinGame(user, inquirer, getChars);
   if (selectedChar === 'CREATE CHARACTER') {
     await createChar(user);
-    selectedChar = await characterList(user, inquirer, getChars);
+    await getCharJoinGame(user, inquirer, getChars);
   } else if (selectedChar === 'BACK') {
     return;
   }
@@ -32,12 +32,13 @@ async function heroConnect(user, rooms) {
 async function userConnect(room, socket, user) {
   let charName = `${selectedChar.name} has joined the table`;
   await unfavorable(selectedChar, 'New game');
-
+  let neededChar = selectedChar;
   let charClass = selectedChar.class;
   socket.emit('JOIN', room);
   socket.emit('TABLE', charName);
   socket.emit('CLASS', charClass);
   socket.emit('CHARACTER', selectedChar);
+  // socket.emit('CHARACTER_END', neededChar)
 }
 
 async function checkForBad() {
