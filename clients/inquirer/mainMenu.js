@@ -19,6 +19,8 @@ const createRoom = require('../socket_handlers/createRoom');
 const createStory = require('../axios/createStory');
 const storiesList = require('./storiesList');
 const getStories = require('../axios/getStories');
+let knight = require('./Art/knight');
+let dice = require('./Art/dice');
 //*GAME LOGIC FUNCTIONS */
 const {
   userPlaying,
@@ -39,9 +41,12 @@ const {
 
 const mainMenu = async (user) => {
   try {
-    console.log('you are logged in as a', user.role);
+    console.log('You are logged in as a', user.role);
     if (user.role === 'hero') {
+      //*ART Below
+      knight();
       let response = await inquirer.prompt([
+
         {
           type: 'list',
           name: 'hero',
@@ -51,6 +56,7 @@ const mainMenu = async (user) => {
       ]);
       return response.hero;
     } else {
+      dice();
       let response = await inquirer.prompt([
         {
           type: 'list',

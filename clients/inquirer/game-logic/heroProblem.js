@@ -17,6 +17,7 @@ async function userPlaying(user, socket, character) {
   let [ability, roll] = res;
   socket.emit('ACTION', ability, roll);
 }
+//*DICE ROLL
 function diceRoll(max, min) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
