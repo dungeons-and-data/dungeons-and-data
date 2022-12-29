@@ -44,16 +44,16 @@ const startIo = (io) => {
         socket.emit('CLASS', payload);
       });
       socket.on('CHARACTER', (payload) => {
-        chosenCharacter = payload
+        chosenCharacter = payload;
         socket.emit('CHARACTER', payload);
       });
-      socket.on('CHARACTER_END', () => {
-        socket.emit('CHARACTER_END', chosenCharacter);
+      socket.on('END', (payload) => {
+        socket.emit('END', payload);
       });
       socket.on('REMAINING', (payload) => {
-        console.log('this is the socket server', payload)
+        console.log('this is the socket server', payload);
         socket.emit('REMAINING', payload);
-      })
+      });
       socket.on('FAVORABLE', (payload) => {
         socket.to(dungeonMasterId).emit('FAVORABLE', payload);
       });

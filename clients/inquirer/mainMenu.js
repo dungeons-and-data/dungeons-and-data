@@ -8,7 +8,6 @@ const createChar = require('../axios/createChar');
 const selectedChar = require('../axios/selectedChar');
 const characterList = require('./characterList');
 const getChars = require('../axios/getChars');
-const gameOnTwo = require('./game-logic/gamePlay');
 //SOCKETS
 const { io } = require('socket.io-client');
 const socket = io('http://localhost:3001/');
@@ -34,7 +33,6 @@ const {
 const {
   dungeonMasterBegin,
   onGoingGame,
-  gameOver,
 } = require('./game-logic/dungeonMaster');
 
 const mainMenu = async (user) => {
