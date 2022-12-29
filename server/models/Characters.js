@@ -8,6 +8,7 @@ const CharacterSchema = new mongoose.Schema({
   class: { type: String, required: true },
   level: { type: Number, default: 1 },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' },
+  bad: { type: Number, default: 0 },
 });
 
 

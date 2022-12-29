@@ -8,6 +8,7 @@ const createChar = require('../axios/createChar');
 const selectedChar = require('../axios/selectedChar');
 const characterList = require('./characterList');
 const getChars = require('../axios/getChars');
+
 //SOCKETS
 const { io } = require('socket.io-client');
 const socket = io('http://localhost:3001/');
@@ -19,6 +20,7 @@ const createStory = require('../axios/createStory');
 const storiesList = require('./storiesList');
 const getStories = require('../axios/getStories');
 //*GAME LOGIC FUNCTIONS */
+const { userPlaying, getClass, getCharacter } = require('../inquirer/game-logic/heroProblem')
 const { heroConnect, userConnect } = require('./game-logic/heroConnect');
 const {
   dungeonMasterBegin,
@@ -66,6 +68,8 @@ const changeRole = async () => {
   return response.roleChange;
 };
 
+socket.on('CLASS', async (payload) => await getClass(payload));
+socket.on('CHARACTER', async (payload) => await getCharacter(payload))
 const menuChoice = async (menuRes, user) => {
   // hero choices
   if (menuRes === 'CHANGE ROLE') {
@@ -80,16 +84,20 @@ const menuChoice = async (menuRes, user) => {
     socket.on('ROOMS', async (payload) => {
       currentRooms = payload;
       currentRooms.push('Back to main menu');
-      const heroReply = await heroConnect(currentRooms);
+      const heroReply = await heroConnect(user, currentRooms);
 
       if (heroReply === 'Back to main menu') {
         socket.off();
         menuRes = await mainMenu(user);
         await menuChoice(menuRes, user);
       } else {
-        userConnect(heroReply, socket);
+        await userConnect(heroReply, socket, user);
       }
     });
+    socket.on('PROBLEM', async (payload) => {
+      await userPlaying(user, socket, payload);
+    })
+
   } else if (menuRes === 'VIEW CHARACTERS') {
     const res = await characterList(user, inquirer, getChars);
 

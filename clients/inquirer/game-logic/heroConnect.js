@@ -1,11 +1,25 @@
-/** @format */
+
 
 'use strict';
 
 const inquirer = require('inquirer');
-
-async function heroConnect(rooms) {
+const characterList = require('../characterList');
+const getChars = require('../../axios/getChars');
+const createChar = require('../../axios/createChar');
+const unfavorable = require('../../axios/unfavorable');
+const axios = require('axios');
+let selectedChar;
+async function heroConnect(user, rooms) {
   console.log('running inq');
+  selectedChar = await characterList(user, inquirer, getChars);
+  if (selectedChar === 'CREATE CHARACTER') {
+    await createChar(user)
+    selectedChar = await characterList(user, inquirer, getChars);
+  } else if (selectedChar === 'BACK') {
+    return;
+  }
+  // console.log(selectedChar);
+
   const reply = await inquirer.prompt([
     {
       type: 'list',
@@ -17,9 +31,15 @@ async function heroConnect(rooms) {
   console.log();
   return reply.hero;
 }
+async function userConnect(room, socket, user) {
+  let charName = `${selectedChar.name} has joined the table`;
+  await unfavorable(selectedChar, 'New game');
 
-function userConnect(room, socket) {
+  let charClass = selectedChar.class
   socket.emit('JOIN', room);
+  socket.emit('TABLE', charName);
+  socket.emit('CLASS', charClass);
+  socket.emit('CHARACTER', selectedChar)
 }
 
 module.exports = { heroConnect, userConnect };

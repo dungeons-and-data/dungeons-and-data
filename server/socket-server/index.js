@@ -2,6 +2,8 @@
 
 'use strict';
 
+
+
 const startIo = (io) => {
   io.on('connection', (socket) => {
     console.log('IO server connection');
@@ -20,6 +22,10 @@ const startIo = (io) => {
           .emit('GAME_STARTED', 'The game is starting!');
       });
 
+      socket.on('TABLE', (payload) => {
+        socket.to(dungeonMasterId).emit('TABLE', payload);
+      });
+
       socket.on('GAME_CHOSEN', (payload) => {
         socket
           .to(dungeonMasterId)
@@ -32,6 +38,22 @@ const startIo = (io) => {
 
       socket.on('PROBLEM', (payload) => {
         socket.to(dungeonMasterId).emit('PROBLEM', payload);
+      });
+      socket.on('ACTION', (payload, roll) => {
+        socket.to(dungeonMasterId).emit('ACTION', payload, roll);
+      });
+      socket.on('CLASS', (payload) => {
+        socket.emit('CLASS', payload);
+      });
+      socket.on('CHARACTER', (payload) => {
+        socket.emit('CHARACTER', payload)
+      })
+      socket.on('FAVORABLE', (payload) => {
+        socket.to(dungeonMasterId).emit('FAVORABLE', payload);
+      });
+      socket.on('UNFAVORABLE', (payload) => {
+        socket.to(dungeonMasterId).emit('UNFAVORABLE', payload);
+        socket.emit('UNFAVORABLE_HERO');
       });
     });
 
