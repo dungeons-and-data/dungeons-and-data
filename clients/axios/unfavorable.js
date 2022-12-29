@@ -1,14 +1,17 @@
+/** @format */
+
 'use strict';
 
 const axios = require('axios');
 let url = 'http://localhost:3001/';
 
 module.exports = async function (character, fav) {
-
   let { _id, name, level, user, bad } = character;
   if (fav === 'New game') {
-    character.bad = 0
-  } else {
+    bad = 0;
+  } else if (fav === 'bad') {
+    const data = await axios.get(`${url}character/${_id}`);
+    bad = data.data.bad;
     ++bad;
   }
   const body = {
@@ -17,8 +20,7 @@ module.exports = async function (character, fav) {
     level,
     user,
     bad,
-    class: character.class
+    class: character.class,
   };
-  console.log(body)
   if (character?.name) return await axios.put(`${url}character/${_id}`, body);
-}
+};

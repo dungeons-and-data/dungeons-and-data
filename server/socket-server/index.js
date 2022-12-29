@@ -2,8 +2,6 @@
 
 'use strict';
 
-
-
 const startIo = (io) => {
   io.on('connection', (socket) => {
     console.log('IO server connection');
@@ -46,14 +44,23 @@ const startIo = (io) => {
         socket.emit('CLASS', payload);
       });
       socket.on('CHARACTER', (payload) => {
-        socket.emit('CHARACTER', payload)
-      })
+        socket.emit('CHARACTER', payload);
+      });
       socket.on('FAVORABLE', (payload) => {
         socket.to(dungeonMasterId).emit('FAVORABLE', payload);
       });
       socket.on('UNFAVORABLE', (payload) => {
         socket.to(dungeonMasterId).emit('UNFAVORABLE', payload);
         socket.emit('UNFAVORABLE_HERO');
+      });
+      socket.on('GAME_OVER', (payload) => {
+        const response =
+          payload === 'loss'
+            ? 'Hero has had to many unfavorable action and has decided to flee!'
+            : 'Victory! The Hero has gained some experience!';
+        socket.to(dungeonMasterId).emit('GAME_OVER', response);
+        socket.emit('GAME_OVER', '');
+        socket.emit('GAME_OVER_DM', '');
       });
     });
 

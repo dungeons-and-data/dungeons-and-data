@@ -8,7 +8,7 @@ const createChar = require('../axios/createChar');
 const selectedChar = require('../axios/selectedChar');
 const characterList = require('./characterList');
 const getChars = require('../axios/getChars');
-
+const gameOnTwo = require('./game-logic/gamePlay');
 //SOCKETS
 const { io } = require('socket.io-client');
 const socket = io('http://localhost:3001/');
@@ -20,11 +20,21 @@ const createStory = require('../axios/createStory');
 const storiesList = require('./storiesList');
 const getStories = require('../axios/getStories');
 //*GAME LOGIC FUNCTIONS */
-const { userPlaying, getClass, getCharacter } = require('../inquirer/game-logic/heroProblem')
-const { heroConnect, userConnect } = require('./game-logic/heroConnect');
+const {
+  userPlaying,
+  getClass,
+  getCharacter,
+  addSomeBad,
+} = require('../inquirer/game-logic/heroProblem');
+const {
+  heroConnect,
+  userConnect,
+  checkForBad,
+} = require('./game-logic/heroConnect');
 const {
   dungeonMasterBegin,
   onGoingGame,
+  gameOver,
 } = require('./game-logic/dungeonMaster');
 
 const mainMenu = async (user) => {
@@ -69,7 +79,7 @@ const changeRole = async () => {
 };
 
 socket.on('CLASS', async (payload) => await getClass(payload));
-socket.on('CHARACTER', async (payload) => await getCharacter(payload))
+socket.on('CHARACTER', async (payload) => await getCharacter(payload));
 const menuChoice = async (menuRes, user) => {
   // hero choices
   if (menuRes === 'CHANGE ROLE') {
@@ -96,8 +106,34 @@ const menuChoice = async (menuRes, user) => {
     });
     socket.on('PROBLEM', async (payload) => {
       await userPlaying(user, socket, payload);
-    })
 
+      const waitForAction = new Promise((resolve, reject) => {
+        socket.on('FAVORABLE', () => {
+          resolve(false);
+        });
+        socket.on('UNFAVORABLE', async () => {
+          await addSomeBad();
+
+          const res = await checkForBad();
+          let endGame;
+          if (res.data.bad >= 3) {
+            socket.emit('GAME_OVER', 'loss');
+            endGame = true;
+          }
+          resolve(endGame);
+        });
+        socket.on('GAME_OVER', () => {
+          resolve(true);
+        });
+      });
+      const actionResult = await waitForAction;
+
+      if (actionResult) {
+        console.log('GAME OVER');
+        menuRes = await mainMenu(user);
+        await menuChoice(menuRes, user);
+      }
+    });
   } else if (menuRes === 'VIEW CHARACTERS') {
     const res = await characterList(user, inquirer, getChars);
 
@@ -115,11 +151,20 @@ const menuChoice = async (menuRes, user) => {
     }
   } else if (menuRes === 'START NEW GAME') {
     createRoom(user.username, socket);
+
+    const waitForAction = new Promise((resolve, reject) => {
+      socket.on('TABLE', (payload) => {
+        resolve({ payload });
+      });
+    });
+    await waitForAction;
+
     const dmDecides = await dungeonMasterBegin();
     if (dmDecides === 'yes') {
-      console.log(dmDecides);
       socket.emit('GAME_STARTED', user.username);
       await onGoingGame(user, socket);
+      menuRes = await mainMenu(user);
+      await menuChoice(menuRes, user);
     } else {
       menuRes = await mainMenu(user);
       await menuChoice(menuRes, user);
