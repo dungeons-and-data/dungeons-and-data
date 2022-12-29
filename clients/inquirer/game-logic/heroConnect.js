@@ -1,7 +1,7 @@
 /** @format */
 
 'use strict';
-
+let url = 'http://localhost:3001/';
 const inquirer = require('inquirer');
 const characterList = require('../characterList');
 const getChars = require('../../axios/getChars');
@@ -42,4 +42,10 @@ async function userConnect(room, socket, user) {
   socket.emit('CHARACTER', selectedChar);
 }
 
-module.exports = { heroConnect, userConnect };
+async function checkForBad() {
+  let response = axios.get(`${url}character/${selectedChar._id}`);
+
+  return response;
+}
+
+module.exports = { heroConnect, userConnect, checkForBad };

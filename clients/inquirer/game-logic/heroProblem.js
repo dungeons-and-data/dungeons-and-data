@@ -13,7 +13,7 @@ async function getCharacter(payload) {
   selectedCharacter = payload;
 }
 async function userPlaying(user, socket, character) {
-  console.log('testing');
+
   let res = await respond();
   let [ability, roll] = res;
   socket.emit('ACTION', ability, roll);

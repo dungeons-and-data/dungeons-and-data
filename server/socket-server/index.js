@@ -53,6 +53,14 @@ const startIo = (io) => {
         socket.to(dungeonMasterId).emit('UNFAVORABLE', payload);
         socket.emit('UNFAVORABLE_HERO');
       });
+      socket.on('GAME_OVER', (payload) => {
+        const response =
+          payload === 'loss'
+            ? 'Hero has had to many unfavorable action and has decided to flee!'
+            : 'Victory! The Hero has gained some experience!';
+        socket.to(dungeonMasterId).emit('GAME_OVER', response);
+        socket.emit('GAME_OVER');
+      });
     });
 
     socket.on('GET_ROOMS', () => {

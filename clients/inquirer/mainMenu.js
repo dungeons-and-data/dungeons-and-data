@@ -25,7 +25,11 @@ const {
   getClass,
   getCharacter,
 } = require('../inquirer/game-logic/heroProblem');
-const { heroConnect, userConnect } = require('./game-logic/heroConnect');
+const {
+  heroConnect,
+  userConnect,
+  checkForBad,
+} = require('./game-logic/heroConnect');
 const {
   dungeonMasterBegin,
   onGoingGame,
@@ -100,6 +104,26 @@ const menuChoice = async (menuRes, user) => {
     });
     socket.on('PROBLEM', async (payload) => {
       await userPlaying(user, socket, payload);
+
+      const waitForAction = new Promise((resolve, reject) => {
+        socket.on('FAVORABLE', () => {
+          resolve(false);
+        });
+        socket.on('UNFAVORABLE', async () => {
+          const res = await checkForBad();
+          let endGame;
+          if (res.data.bad >= 3) {
+            socket.emit('GAME_OVER');
+            endGame = true;
+          }
+          resolve(endGame);
+        });
+      });
+      const actionResult = await waitForAction;
+      if (actionResult) {
+        menuRes = await mainMenu(user);
+        await menuChoice(menuRes, user);
+      }
     });
   } else if (menuRes === 'VIEW CHARACTERS') {
     const res = await characterList(user, inquirer, getChars);
@@ -121,12 +145,11 @@ const menuChoice = async (menuRes, user) => {
 
     const waitForAction = new Promise((resolve, reject) => {
       socket.on('TABLE', (payload) => {
-        console.log('RESOLVED');
         resolve({ payload });
       });
     });
-
     const actionResult = await waitForAction;
+
     const dmDecides = await dungeonMasterBegin();
     if (dmDecides === 'yes') {
       console.log(dmDecides);
