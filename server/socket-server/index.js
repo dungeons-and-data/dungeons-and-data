@@ -2,8 +2,6 @@
 
 'use strict';
 
-
-
 const startIo = (io) => {
   io.on('connection', (socket) => {
     console.log('IO server connection');
@@ -46,8 +44,8 @@ const startIo = (io) => {
         socket.emit('CLASS', payload);
       });
       socket.on('CHARACTER', (payload) => {
-        socket.emit('CHARACTER', payload)
-      })
+        socket.emit('CHARACTER', payload);
+      });
       socket.on('FAVORABLE', (payload) => {
         socket.to(dungeonMasterId).emit('FAVORABLE', payload);
       });

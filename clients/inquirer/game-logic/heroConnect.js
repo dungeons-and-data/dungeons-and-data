@@ -1,4 +1,4 @@
-
+/** @format */
 
 'use strict';
 
@@ -13,7 +13,7 @@ async function heroConnect(user, rooms) {
   console.log('running inq');
   selectedChar = await characterList(user, inquirer, getChars);
   if (selectedChar === 'CREATE CHARACTER') {
-    await createChar(user)
+    await createChar(user);
     selectedChar = await characterList(user, inquirer, getChars);
   } else if (selectedChar === 'BACK') {
     return;
@@ -35,11 +35,11 @@ async function userConnect(room, socket, user) {
   let charName = `${selectedChar.name} has joined the table`;
   await unfavorable(selectedChar, 'New game');
 
-  let charClass = selectedChar.class
+  let charClass = selectedChar.class;
   socket.emit('JOIN', room);
   socket.emit('TABLE', charName);
   socket.emit('CLASS', charClass);
-  socket.emit('CHARACTER', selectedChar)
+  socket.emit('CHARACTER', selectedChar);
 }
 
 module.exports = { heroConnect, userConnect };

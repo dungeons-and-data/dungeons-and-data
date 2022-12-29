@@ -26,9 +26,9 @@ async function gamePlay(incomingChapters, socket) {
   const chosenChap = incomingChapters.filter(
     (item) => item[1] === chosenOne[1],
   );
-  console.log(chosenChap, 'CHOSEN CHAP');
+
   let remainingScenarios = chosenChap[0][2];
-  console.log(remainingScenarios, 'REMAINING');
+
   while (remainingScenarios.length > 0) {
     console.log('top of loop');
 
@@ -39,9 +39,8 @@ async function gamePlay(incomingChapters, socket) {
 }
 
 module.exports = gamePlay;
-let bad = 0;
+
 async function playScenario(remainingScenarios, socket) {
-  console.log(remainingScenarios, 'IN HERE');
   const reply = await inquirer.prompt([
     {
       type: 'list',
@@ -54,22 +53,29 @@ async function playScenario(remainingScenarios, socket) {
   const remaining = remainingScenarios.filter((item) => item !== reply.problem);
 
   socket.emit('PROBLEM', reply.problem);
-  socket.on('ACTION', (payload, roll) => console.log(payload, roll))
-  socket.on('UNFAVORABLE_HERO', () => console.log('sadas'))
 
-  let waitForRes = await inquirer
-    .prompt([
-      {
-        type: 'list',
-        name: 'chap',
-        choices: ['Favorable Action', 'Unfavorable action'],
-        message: 'After all heros roll. make a decision',
-      },
-    ]);
+  const waitForAction = new Promise((resolve, reject) => {
+    socket.on('ACTION', (payload, roll) => {
+      resolve({ payload, roll });
+    });
+  });
+
+  const actionResult = await waitForAction;
+
+  // socket.on('UNFAVORABLE_HERO', () => console.log('sadas'));
+
+  let waitForRes = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'chap',
+      choices: ['Favorable Action', 'Unfavorable action'],
+      message: 'After all heros roll. make a decision',
+    },
+  ]);
   if (waitForRes.chap === 'Favorable Action') {
-    socket.emit('FAVORABLE', 'hero got a favorable action')
+    socket.emit('FAVORABLE', 'hero got a favorable action');
   } else if (waitForRes.chap === 'Unfavorable action') {
-    socket.emit('UNFAVORABLE', 'hero got an unfavorable action')
+    socket.emit('UNFAVORABLE', 'hero got an unfavorable action');
   }
 
   return remaining;

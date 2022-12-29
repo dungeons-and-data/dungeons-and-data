@@ -20,7 +20,11 @@ const createStory = require('../axios/createStory');
 const storiesList = require('./storiesList');
 const getStories = require('../axios/getStories');
 //*GAME LOGIC FUNCTIONS */
-const { userPlaying, getClass, getCharacter } = require('../inquirer/game-logic/heroProblem')
+const {
+  userPlaying,
+  getClass,
+  getCharacter,
+} = require('../inquirer/game-logic/heroProblem');
 const { heroConnect, userConnect } = require('./game-logic/heroConnect');
 const {
   dungeonMasterBegin,
@@ -69,7 +73,7 @@ const changeRole = async () => {
 };
 
 socket.on('CLASS', async (payload) => await getClass(payload));
-socket.on('CHARACTER', async (payload) => await getCharacter(payload))
+socket.on('CHARACTER', async (payload) => await getCharacter(payload));
 const menuChoice = async (menuRes, user) => {
   // hero choices
   if (menuRes === 'CHANGE ROLE') {
@@ -96,8 +100,7 @@ const menuChoice = async (menuRes, user) => {
     });
     socket.on('PROBLEM', async (payload) => {
       await userPlaying(user, socket, payload);
-    })
-
+    });
   } else if (menuRes === 'VIEW CHARACTERS') {
     const res = await characterList(user, inquirer, getChars);
 
@@ -115,6 +118,15 @@ const menuChoice = async (menuRes, user) => {
     }
   } else if (menuRes === 'START NEW GAME') {
     createRoom(user.username, socket);
+
+    const waitForAction = new Promise((resolve, reject) => {
+      socket.on('TABLE', (payload) => {
+        console.log('RESOLVED');
+        resolve({ payload });
+      });
+    });
+
+    const actionResult = await waitForAction;
     const dmDecides = await dungeonMasterBegin();
     if (dmDecides === 'yes') {
       console.log(dmDecides);

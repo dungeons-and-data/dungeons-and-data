@@ -32,11 +32,11 @@ async function onGoingGame(user, socket) {
   ]);
 
   while (readChapters.length > 0) {
-    console.log('top of loop');
+
 
     remainingChaps = await gamePlay(remainingChaps, socket);
   }
-  console.log('GAME OVER');
+ 
 }
 
 module.exports = { dungeonMasterBegin, onGoingGame };
