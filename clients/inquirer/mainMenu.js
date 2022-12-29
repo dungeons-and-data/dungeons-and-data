@@ -1,3 +1,5 @@
+/** @format */
+
 'use strict';
 const inquirer = require('inquirer');
 const loginChoice = require('../axios/login');
@@ -12,38 +14,39 @@ const socket = io('http://localhost:3001/');
 
 const selectedStory = require('./selectedStory');
 
-
 const createRoom = require('../socket_handlers/createRoom');
 const createStory = require('../axios/createStory');
 const storiesList = require('./storiesList');
 const getStories = require('../axios/getStories');
 //*GAME LOGIC FUNCTIONS */
 const { heroConnect, userConnect } = require('./game-logic/heroConnect');
+const {
+  dungeonMasterBegin,
+  onGoingGame,
+} = require('./game-logic/dungeonMaster');
 
 const mainMenu = async (user) => {
   try {
     console.log('you are logged in as a', user.role);
     if (user.role === 'hero') {
-      let response = await inquirer
-        .prompt([
-          {
-            type: 'list',
-            name: 'hero',
-            message: 'please choose an option',
-            choices: ['CHANGE ROLE', 'FIND GAME', 'VIEW CHARACTERS', 'EXIT'],
-          },
-        ]);
+      let response = await inquirer.prompt([
+        {
+          type: 'list',
+          name: 'hero',
+          message: 'please choose an option',
+          choices: ['CHANGE ROLE', 'FIND GAME', 'VIEW CHARACTERS', 'EXIT'],
+        },
+      ]);
       return response.hero;
     } else {
-      let response = await inquirer
-        .prompt([
-          {
-            type: 'list',
-            name: 'DM',
-            message: 'please choose an option',
-            choices: ['CHANGE ROLE', 'START NEW GAME', 'VIEW STORIES', 'EXIT'],
-          },
-        ]);
+      let response = await inquirer.prompt([
+        {
+          type: 'list',
+          name: 'DM',
+          message: 'please choose an option',
+          choices: ['CHANGE ROLE', 'START NEW GAME', 'VIEW STORIES', 'EXIT'],
+        },
+      ]);
       return response.DM;
     }
   } catch (e) {
@@ -52,14 +55,14 @@ const mainMenu = async (user) => {
 };
 
 const changeRole = async () => {
-  let response = await inquirer
-    .prompt([{
+  let response = await inquirer.prompt([
+    {
       type: 'list',
       name: 'roleChange',
       message: 'Select your desired role',
       choices: ['hero', 'dungeon-master'],
-
-    }]);
+    },
+  ]);
   return response.roleChange;
 };
 
@@ -71,17 +74,22 @@ const menuChoice = async (menuRes, user) => {
     menuRes = await mainMenu(user);
     await menuChoice(menuRes, user);
   } else if (menuRes === 'FIND GAME') {
-
     socket.emit('GET_ROOMS');
-    let currentRooms;
-    console.log('OBVIOUS 1');
-    socket.on('ROOMS', function (payload) {
-      console.log('OBVIOUS 2');
+    let currentRooms = ['THIS IS BAD'];
+
+    socket.on('ROOMS', async (payload) => {
       currentRooms = payload;
+      currentRooms.push('Back to main menu');
+      const heroReply = await heroConnect(currentRooms);
+
+      if (heroReply === 'Back to main menu') {
+        socket.off();
+        menuRes = await mainMenu(user);
+        await menuChoice(menuRes, user);
+      } else {
+        userConnect(heroReply, socket);
+      }
     });
-    let selectedRoom = await heroConnect(currentRooms);
-    console.log('OBVIOUS 3');
-    userConnect(selectedRoom, socket);
   } else if (menuRes === 'VIEW CHARACTERS') {
     const res = await characterList(user, inquirer, getChars);
 
@@ -97,9 +105,17 @@ const menuChoice = async (menuRes, user) => {
       menuRes = await mainMenu(user);
       await menuChoice(menuRes, user);
     }
-
   } else if (menuRes === 'START NEW GAME') {
     createRoom(user.username, socket);
+    const dmDecides = await dungeonMasterBegin();
+    if (dmDecides === 'yes') {
+      console.log(dmDecides);
+      socket.emit('GAME_STARTED', user.username);
+      await onGoingGame(user, socket);
+    } else {
+      menuRes = await mainMenu(user);
+      await menuChoice(menuRes, user);
+    }
     console.log('starting new game');
   } else if (menuRes === 'VIEW STORIES') {
     const res = await storiesList(user, inquirer, getStories);

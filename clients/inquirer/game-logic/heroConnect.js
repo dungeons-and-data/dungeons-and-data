@@ -1,8 +1,11 @@
+/** @format */
+
 'use strict';
 
 const inquirer = require('inquirer');
 
 async function heroConnect(rooms) {
+  console.log('running inq');
   const reply = await inquirer.prompt([
     {
       type: 'list',
@@ -11,12 +14,12 @@ async function heroConnect(rooms) {
       choices: rooms,
     },
   ]);
+  console.log();
   return reply.hero;
 }
 
-async function userConnect(room, socket){
+function userConnect(room, socket) {
   socket.emit('JOIN', room);
 }
-
 
 module.exports = { heroConnect, userConnect };
