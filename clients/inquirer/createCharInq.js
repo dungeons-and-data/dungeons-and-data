@@ -18,6 +18,9 @@ module.exports = async () => {
     const data = await axios
       .get('https://www.dnd5eapi.co/api/classes');
     const classNames = data.data.results.map(prof => prof.name);
+
+    const allowedClasses = classNames.filter(item => item !== 'Barbarian' && item !== 'Fighter' && item !== 'Monk' && item !== 'Rogue');
+
     const reply = await inquirer
       .prompt([
         {
@@ -29,7 +32,7 @@ module.exports = async () => {
           type: 'list',
           name: 'profession',
           message: 'Please choose a class.',
-          choices: classNames,
+          choices: allowedClasses,
         },
       ]);
 
