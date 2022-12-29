@@ -10,9 +10,9 @@ module.exports = async function (character, fav) {
   let { _id, name, level, user, bad } = character;
   if (fav === 'New game') {
     bad = 0;
-    console.log('resetting');
   } else if (fav === 'bad') {
-    console.log('ADDING BAD');
+    const data = await axios.get(`${url}character/${_id}`);
+    bad = data.data.bad;
     ++bad;
   }
   const body = {
