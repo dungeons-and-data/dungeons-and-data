@@ -40,7 +40,6 @@ async function respond() {
 }
 
 async function addSomeBad() {
-  console.log('ADDING SOME BAD FUNCTION');
   return await unfavorable(selectedCharacter, 'bad');
 }
 

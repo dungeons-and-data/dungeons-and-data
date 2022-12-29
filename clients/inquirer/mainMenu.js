@@ -8,7 +8,7 @@ const createChar = require('../axios/createChar');
 const selectedChar = require('../axios/selectedChar');
 const characterList = require('./characterList');
 const getChars = require('../axios/getChars');
-
+const gameOnTwo = require('./game-logic/gamePlay');
 //SOCKETS
 const { io } = require('socket.io-client');
 const socket = io('http://localhost:3001/');
@@ -34,6 +34,7 @@ const {
 const {
   dungeonMasterBegin,
   onGoingGame,
+  gameOver,
 } = require('./game-logic/dungeonMaster');
 
 const mainMenu = async (user) => {
@@ -111,8 +112,8 @@ const menuChoice = async (menuRes, user) => {
           resolve(false);
         });
         socket.on('UNFAVORABLE', async () => {
-          const data = await addSomeBad();
-          console.log(data.data);
+          await addSomeBad();
+
           const res = await checkForBad();
           let endGame;
           if (res.data.bad >= 3) {
@@ -122,13 +123,13 @@ const menuChoice = async (menuRes, user) => {
           resolve(endGame);
         });
         socket.on('GAME_OVER', () => {
-          console.log('GAME OVER');
           resolve(true);
         });
       });
       const actionResult = await waitForAction;
 
       if (actionResult) {
+        console.log('GAME OVER');
         menuRes = await mainMenu(user);
         await menuChoice(menuRes, user);
       }

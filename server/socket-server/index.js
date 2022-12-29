@@ -59,7 +59,8 @@ const startIo = (io) => {
             ? 'Hero has had to many unfavorable action and has decided to flee!'
             : 'Victory! The Hero has gained some experience!';
         socket.to(dungeonMasterId).emit('GAME_OVER', response);
-        socket.emit('GAME_OVER');
+        socket.emit('GAME_OVER', '');
+        socket.emit('GAME_OVER_DM', '');
       });
     });
 

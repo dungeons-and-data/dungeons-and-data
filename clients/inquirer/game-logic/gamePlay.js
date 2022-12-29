@@ -1,11 +1,15 @@
 /** @format */
 
 'use strict';
-
+let gameOn;
 const inquirer = require('inquirer');
 
-async function gamePlay(incomingChapters, socket) {
+module.exports = function gameOnTwo() {
+  gameOn = false;
+};
 
+async function gamePlay(incomingChapters = [], socket) {
+  gameOn = true;
   const choices = incomingChapters.map((item) => item[0] + ':' + item[1]);
 
   const reply = await inquirer.prompt([
@@ -30,7 +34,9 @@ async function gamePlay(incomingChapters, socket) {
   let remainingScenarios = chosenChap[0][2];
 
   while (remainingScenarios.length > 0) {
-
+    if (!gameOn) {
+      return [];
+    }
     remainingScenarios = await playScenario(remainingScenarios, socket);
   }
 
@@ -60,7 +66,6 @@ async function playScenario(remainingScenarios, socket) {
   });
 
   await waitForAction;
-
 
   let waitForRes = await inquirer.prompt([
     {
