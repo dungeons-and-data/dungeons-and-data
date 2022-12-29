@@ -5,7 +5,6 @@
 const inquirer = require('inquirer');
 const getStories = require('../../axios/getStories');
 const storiesList = require('../storiesList');
-const readChapters = require('../storyCrud/readChapters');
 const gamePlay = require('./gamePlay');
 
 async function dungeonMasterBegin() {
@@ -31,12 +30,11 @@ async function onGoingGame(user, socket) {
     item.scenarios,
   ]);
 
-  while (readChapters.length > 0) {
-
-
+  while (remainingChaps.length > 0) {
     remainingChaps = await gamePlay(remainingChaps, socket);
   }
- 
+  socket.emit('GAME_OVER', 'VICTORY!');
+  return;
 }
 
 module.exports = { dungeonMasterBegin, onGoingGame };

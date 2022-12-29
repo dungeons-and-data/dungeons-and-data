@@ -10,7 +10,6 @@ const unfavorable = require('../../axios/unfavorable');
 const axios = require('axios');
 let selectedChar;
 async function heroConnect(user, rooms) {
-  console.log('running inq');
   selectedChar = await characterList(user, inquirer, getChars);
   if (selectedChar === 'CREATE CHARACTER') {
     await createChar(user);
@@ -18,7 +17,6 @@ async function heroConnect(user, rooms) {
   } else if (selectedChar === 'BACK') {
     return;
   }
-  // console.log(selectedChar);
 
   const reply = await inquirer.prompt([
     {
@@ -28,7 +26,7 @@ async function heroConnect(user, rooms) {
       choices: rooms,
     },
   ]);
-  console.log();
+
   return reply.hero;
 }
 async function userConnect(room, socket, user) {
@@ -43,7 +41,7 @@ async function userConnect(room, socket, user) {
 }
 
 async function checkForBad() {
-  let response = axios.get(`${url}character/${selectedChar._id}`);
+  let response = await axios.get(`${url}character/${selectedChar._id}`);
 
   return response;
 }

@@ -5,15 +5,14 @@ const inquirer = require('inquirer');
 let charClass;
 let selectedCharacter;
 const axios = require('axios');
+const unfavorable = require('../../axios/unfavorable');
 async function getClass(payload) {
   charClass = payload.toLowerCase();
-  console.log(charClass);
 }
 async function getCharacter(payload) {
   selectedCharacter = payload;
 }
 async function userPlaying(user, socket, character) {
-
   let res = await respond();
   let [ability, roll] = res;
   socket.emit('ACTION', ability, roll);
@@ -22,7 +21,6 @@ function diceRoll(max, min) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 async function respond() {
-  console.log(charClass);
   let spells = await axios.get(
     `https://www.dnd5eapi.co/api/classes/${charClass}/spells`,
   );
@@ -41,4 +39,9 @@ async function respond() {
   return [reply.response, roll];
 }
 
-module.exports = { userPlaying, getClass, getCharacter };
+async function addSomeBad() {
+  console.log('ADDING SOME BAD FUNCTION');
+  return await unfavorable(selectedCharacter, 'bad');
+}
+
+module.exports = { userPlaying, getClass, getCharacter, addSomeBad };

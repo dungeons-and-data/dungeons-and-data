@@ -5,7 +5,7 @@
 const inquirer = require('inquirer');
 
 async function gamePlay(incomingChapters, socket) {
-  console.log(incomingChapters);
+
   const choices = incomingChapters.map((item) => item[0] + ':' + item[1]);
 
   const reply = await inquirer.prompt([
@@ -30,7 +30,6 @@ async function gamePlay(incomingChapters, socket) {
   let remainingScenarios = chosenChap[0][2];
 
   while (remainingScenarios.length > 0) {
-    console.log('top of loop');
 
     remainingScenarios = await playScenario(remainingScenarios, socket);
   }
@@ -60,9 +59,8 @@ async function playScenario(remainingScenarios, socket) {
     });
   });
 
-  const actionResult = await waitForAction;
+  await waitForAction;
 
-  // socket.on('UNFAVORABLE_HERO', () => console.log('sadas'));
 
   let waitForRes = await inquirer.prompt([
     {

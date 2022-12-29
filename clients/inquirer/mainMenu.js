@@ -24,6 +24,7 @@ const {
   userPlaying,
   getClass,
   getCharacter,
+  addSomeBad,
 } = require('../inquirer/game-logic/heroProblem');
 const {
   heroConnect,
@@ -110,16 +111,23 @@ const menuChoice = async (menuRes, user) => {
           resolve(false);
         });
         socket.on('UNFAVORABLE', async () => {
+          const data = await addSomeBad();
+          console.log(data.data);
           const res = await checkForBad();
           let endGame;
           if (res.data.bad >= 3) {
-            socket.emit('GAME_OVER');
+            socket.emit('GAME_OVER', 'loss');
             endGame = true;
           }
           resolve(endGame);
         });
+        socket.on('GAME_OVER', () => {
+          console.log('GAME OVER');
+          resolve(true);
+        });
       });
       const actionResult = await waitForAction;
+
       if (actionResult) {
         menuRes = await mainMenu(user);
         await menuChoice(menuRes, user);
@@ -148,13 +156,14 @@ const menuChoice = async (menuRes, user) => {
         resolve({ payload });
       });
     });
-    const actionResult = await waitForAction;
+    await waitForAction;
 
     const dmDecides = await dungeonMasterBegin();
     if (dmDecides === 'yes') {
-      console.log(dmDecides);
       socket.emit('GAME_STARTED', user.username);
       await onGoingGame(user, socket);
+      menuRes = await mainMenu(user);
+      await menuChoice(menuRes, user);
     } else {
       menuRes = await mainMenu(user);
       await menuChoice(menuRes, user);
