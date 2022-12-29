@@ -4,10 +4,6 @@
 let gameOn;
 const inquirer = require('inquirer');
 
-module.exports = function gameOnTwo() {
-  gameOn = false;
-};
-
 async function gamePlay(incomingChapters = [], socket) {
   gameOn = true;
   const choices = incomingChapters.map((item) => item[0] + ':' + item[1]);
@@ -46,17 +42,31 @@ async function gamePlay(incomingChapters = [], socket) {
 module.exports = gamePlay;
 
 async function playScenario(remainingScenarios, socket) {
-  const reply = await inquirer.prompt([
-    {
-      type: 'list',
-      name: 'problem',
-      choices: remainingScenarios,
-      message: 'Pick a scenario for the user',
-    },
-  ]);
+  if (!remainingScenarios.includes('END GAME')) {
+    remainingScenarios.push('END GAME');
+  }
+  if (remainingScenarios.length === 1) {
+    remainingScenarios.pop();
+  }
+  let reply = '';
+  if (remainingScenarios.length > 0) {
+    reply = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'problem',
+        choices: remainingScenarios,
+        message: 'Pick a scenario for the user',
+      },
+    ]);
+  }
 
-  const remaining = remainingScenarios.filter((item) => item !== reply.problem);
-
+  let remaining;
+  if (reply.problem !== 'END GAME') {
+    remaining = remainingScenarios.filter((item) => item !== reply.problem);
+  } else if (reply.problem === 'END GAME') {
+    socket.emit('END', 'Game Ended!');
+    return 'end';
+  }
   socket.emit('PROBLEM', reply.problem);
 
   const waitForAction = new Promise((resolve, reject) => {
