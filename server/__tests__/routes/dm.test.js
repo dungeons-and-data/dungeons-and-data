@@ -1,7 +1,7 @@
 const request = require('supertest');
-const { server, connectToMongoDB } = require('../src/server');
+const { server, connectToMongoDB } = require('../../src/server');
 const mongoose = require('mongoose');
-const Story = require('../models/Story');
+const Story = require('../../models/Story');
 
 beforeAll(async () => {
   await connectToMongoDB();

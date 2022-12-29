@@ -1,6 +1,6 @@
 const request = require('supertest');
-const { server, connectToMongoDB } = require('../src/server');
-const User = require('../models/User');
+const { server, connectToMongoDB } = require('../../src/server');
+const User = require('../../models/User');
 const mongoose = require('mongoose');
 
 

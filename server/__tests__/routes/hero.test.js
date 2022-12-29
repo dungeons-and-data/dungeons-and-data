@@ -2,9 +2,9 @@
 
 
 const request = require('supertest');
-const { server, connectToMongoDB } = require('../src/server');
+const { server, connectToMongoDB } = require('../../src/server');
 const mongoose = require('mongoose');
-const Characters = require('../models/Characters');
+const Characters = require('../../models/Characters');
 
 
 beforeAll(async () => {

@@ -6,17 +6,19 @@ const createChar = require('../axios/createChar');
 const selectedChar = require('../axios/selectedChar');
 const characterList = require('./characterList');
 const getChars = require('../axios/getChars');
+//SOCKETS
+const { io } = require('socket.io-client');
+const socket = io('http://localhost:3001/');
 
 const selectedStory = require('./selectedStory');
 
 
-const createRoom = require('../socket_handlers/dungeon_masters/createRoom');
-const { requestListOfRooms, getListOfRooms, joinRoom, socket } = require('../socket_handlers/heroes/roomHandlers');
-
-
+const createRoom = require('../socket_handlers/createRoom');
 const createStory = require('../axios/createStory');
 const storiesList = require('./storiesList');
 const getStories = require('../axios/getStories');
+//*GAME LOGIC FUNCTIONS */
+const { heroConnect, userConnect } = require('./game-logic/heroConnect');
 
 const mainMenu = async (user) => {
   try {
@@ -72,11 +74,14 @@ const menuChoice = async (menuRes, user) => {
 
     socket.emit('GET_ROOMS');
     let currentRooms;
-    socket.on('ROOMS', function(payload) {
+    console.log('OBVIOUS 1');
+    socket.on('ROOMS', function (payload) {
+      console.log('OBVIOUS 2');
       currentRooms = payload;
     });
-
-    console.log('finding game');
+    let selectedRoom = await heroConnect(currentRooms);
+    console.log('OBVIOUS 3');
+    userConnect(selectedRoom, socket);
   } else if (menuRes === 'VIEW CHARACTERS') {
     const res = await characterList(user, inquirer, getChars);
 
@@ -94,7 +99,7 @@ const menuChoice = async (menuRes, user) => {
     }
 
   } else if (menuRes === 'START NEW GAME') {
-    createRoom(user.username);
+    createRoom(user.username, socket);
     console.log('starting new game');
   } else if (menuRes === 'VIEW STORIES') {
     const res = await storiesList(user, inquirer, getStories);
@@ -105,7 +110,7 @@ const menuChoice = async (menuRes, user) => {
       await createStory(user);
       menuRes = await mainMenu(user);
       await menuChoice(menuRes, user);
-    }  else {
+    } else {
       let story = res;
       await selectedStory(user, story);
       menuRes = await mainMenu(user);
