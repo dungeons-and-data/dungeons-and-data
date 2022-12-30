@@ -3,7 +3,7 @@
 'use strict';
 
 const axios = require('axios');
-let url = 'http://localhost:3001/';
+let url = 'https://dungeons-and-data-staging.onrender.com/';
 
 async function updateNewTheme(userToken, theme, story) {
   const { token } = userToken;

@@ -1,6 +1,6 @@
 const { logInMenu, loginReq, signupReq } = require('../inquirer/login');
 const axios = require('axios');
-let url = process.env.URL || 'http://localhost:3001/';
+let url = process.env.URL || 'https://dungeons-and-data-staging.onrender.com/';
 
 const loginChoice = async () => {
   let response = await logInMenu();
