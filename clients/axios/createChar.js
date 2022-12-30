@@ -1,14 +1,15 @@
+/** @format */
+
 'use strict';
 const axios = require('axios');
-let url = 'https://dungeons-and-data-staging.onrender.com/';
+let url = 'https://dungeons-and-data-staging.up.railway.app/';
 const createCharInq = require('../inquirer/createCharInq');
 module.exports = async (user) => {
-
   const { token } = user;
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
-// ()sdfsdfsdfsdf
+  // ()sdfsdfsdfsdf
   const charData = await createCharInq();
   const { name, profession } = charData;
   const body = {
@@ -18,9 +19,7 @@ module.exports = async (user) => {
   };
   const newChar = await axios.post(`${url}character`, body, config);
 
-
   console.log(newChar.data);
-
 
   return;
 };

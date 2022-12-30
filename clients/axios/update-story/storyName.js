@@ -3,7 +3,7 @@
 'use strict';
 
 const axios = require('axios');
-let url = 'https://dungeons-and-data-staging.onrender.com/';
+let url = 'https://dungeons-and-data-staging.up.railway.app/';
 
 async function storyName(userToken, storyName, story) {
   const { token } = userToken;

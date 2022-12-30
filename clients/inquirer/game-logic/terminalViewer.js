@@ -3,7 +3,7 @@
 'use strict';
 
 const { io } = require('socket.io-client');
-const socket = io('https://dungeons-and-data-staging.onrender.com/');
+const socket = io('https://dungeons-and-data-staging.up.railway.app/');
 
 socket.emit('JOIN', 'user1');
 socket.on('USER_CONNECTED', (payload) => {

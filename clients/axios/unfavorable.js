@@ -3,7 +3,7 @@
 'use strict';
 
 const axios = require('axios');
-let url = 'https://dungeons-and-data-staging.onrender.com/';
+let url = 'https://dungeons-and-data-staging.up.railway.app/';
 
 module.exports = async function (character, fav) {
   let { _id, name, level, user, bad } = character;

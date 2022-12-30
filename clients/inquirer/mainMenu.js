@@ -10,7 +10,7 @@ const characterList = require('./characterList');
 const getChars = require('../axios/getChars');
 //SOCKETS
 const { io } = require('socket.io-client');
-const socket = io('https://dungeons-and-data-staging.onrender.com/');
+const socket = io('https://dungeons-and-data-staging.up.railway.app/');
 
 const selectedStory = require('./selectedStory');
 
@@ -44,7 +44,6 @@ const mainMenu = async (user) => {
       //*ART Below
       knight();
       let response = await inquirer.prompt([
-
         {
           type: 'list',
           name: 'hero',

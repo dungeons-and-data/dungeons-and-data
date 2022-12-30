@@ -1,7 +1,7 @@
 /** @format */
 
 'use strict';
-let url = 'https://dungeons-and-data-staging.onrender.com/';
+let url = 'https://dungeons-and-data-staging.up.railway.app/';
 const inquirer = require('inquirer');
 const characterList = require('../characterList');
 const getChars = require('../../axios/getChars');
