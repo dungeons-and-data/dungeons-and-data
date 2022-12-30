@@ -10,7 +10,7 @@ const characterList = require('./characterList');
 const getChars = require('../axios/getChars');
 //SOCKETS
 const { io } = require('socket.io-client');
-const socket = io('http://localhost:3001/');
+const socket = io('https://dungeons-and-data-staging.onrender.com/');
 
 const selectedStory = require('./selectedStory');
 

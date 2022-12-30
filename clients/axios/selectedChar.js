@@ -1,6 +1,6 @@
 'use strict';
 const axios = require('axios');
-let url = 'http://localhost:3001/';
+let url = 'https://dungeons-and-data-staging.onrender.com/';
 const selectedCharInq = require('../inquirer/selectedCharInq');
 const characterList = require('../inquirer/characterList');
 const inquirer = require('inquirer');
