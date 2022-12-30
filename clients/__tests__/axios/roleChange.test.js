@@ -1,14 +1,16 @@
+/** @format */
+
 const { diffRole } = require('../../axios/roleChange');
 
 const axios = require('axios');
 
-let url = process.env.URL || 'http://localhost:3001/';
+let url =
+  process.env.URL || 'https://dungeons-and-data-staging.up.railway.app/';
 
 jest.mock('axios');
 
 describe('diffRole function', () => {
   test('returns correct data when called with valid input', async () => {
-
     axios.put.mockResolvedValue({ data: 'Success' });
 
     const user = { id: '123', token: '456' };
