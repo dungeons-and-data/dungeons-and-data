@@ -30,7 +30,7 @@ async function onGoingGame(user, socket) {
 
   while (remainingChaps.length > 0) {
     if (remainingChaps === 'end') return;
-    console.log(remainingChaps);
+ 
     remainingChaps = await gamePlay(remainingChaps, socket);
   }
 
