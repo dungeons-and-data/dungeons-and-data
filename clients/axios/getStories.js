@@ -1,11 +1,16 @@
+/** @format */
+
 'use strict';
 const axios = require('axios');
 
 module.exports = async (user) => {
+  const storiesAll = await axios.get(
+    'https://dungeons-and-data-staging.up.railway.app/stories',
+  );
 
-  const storiesAll = await axios.get('http://localhost:3001/stories');
-
-  const userStories = storiesAll.data.filter(stories => stories.user === user.id);
+  const userStories = storiesAll.data.filter(
+    (stories) => stories.user === user.id,
+  );
 
   return userStories;
 };

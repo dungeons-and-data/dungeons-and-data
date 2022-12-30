@@ -1,12 +1,13 @@
+/** @format */
+
 'use strict';
 const axios = require('axios');
-let url = 'http://localhost:3001/';
+let url = 'https://dungeons-and-data-staging.up.railway.app/';
 const selectedCharInq = require('../inquirer/selectedCharInq');
 const characterList = require('../inquirer/characterList');
 const inquirer = require('inquirer');
 const getChars = require('./getChars');
 module.exports = async (character, user) => {
-
   const { token } = user;
   const config = {
     headers: { Authorization: `Bearer ${token}` },
@@ -32,7 +33,6 @@ module.exports = async (character, user) => {
       user: character.user,
     };
     await axios.put(`${url}character/${character._id}`, body, config);
-
   } else if (userChoice[0] === 'delete') {
     await axios.delete(`${url}character/${character._id}`, {}, config);
   }

@@ -1,7 +1,10 @@
+/** @format */
+
 'use strict';
 const axios = require('axios');
 
-let url = process.env.URL || 'http://localhost:3001/';
+let url =
+  process.env.URL || 'https://dungeons-and-data-staging.up.railway.app/';
 const diffRole = async (user, change) => {
   const { token } = user;
   const config = {

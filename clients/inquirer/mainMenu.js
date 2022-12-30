@@ -10,7 +10,7 @@ const characterList = require('./characterList');
 const getChars = require('../axios/getChars');
 //SOCKETS
 const { io } = require('socket.io-client');
-const socket = io('http://localhost:3001/');
+const socket = io('https://dungeons-and-data-staging.up.railway.app/');
 
 const selectedStory = require('./selectedStory');
 
@@ -18,6 +18,8 @@ const createRoom = require('../socket_handlers/createRoom');
 const createStory = require('../axios/createStory');
 const storiesList = require('./storiesList');
 const getStories = require('../axios/getStories');
+let knight = require('./Art/knight');
+let dice = require('./Art/dice');
 //*GAME LOGIC FUNCTIONS */
 const {
   userPlaying,
@@ -37,8 +39,10 @@ const {
 
 const mainMenu = async (user) => {
   try {
-    console.log('you are logged in as a', user.role);
+    console.log('You are logged in as a', user.role);
     if (user.role === 'hero') {
+      //*ART Below
+      knight();
       let response = await inquirer.prompt([
         {
           type: 'list',
@@ -49,6 +53,7 @@ const mainMenu = async (user) => {
       ]);
       return response.hero;
     } else {
+      dice();
       let response = await inquirer.prompt([
         {
           type: 'list',

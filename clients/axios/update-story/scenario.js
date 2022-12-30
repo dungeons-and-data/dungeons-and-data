@@ -3,7 +3,7 @@
 'use strict';
 
 const axios = require('axios');
-let url = 'http://localhost:3001/';
+let url = 'https://dungeons-and-data-staging.up.railway.app/';
 
 async function scenario(userToken, newScenario, chapterId, story, original) {
   const { token } = userToken;
